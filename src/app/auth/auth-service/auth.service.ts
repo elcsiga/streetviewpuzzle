@@ -42,8 +42,6 @@ export class AuthService {
   } 
   
   login(email: string, password: string) {
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .then( re => console.log('LOGIN', re))
-    .catch( error => console.error('LOGIN', error));
+    return firebase.auth().signInWithEmailAndPassword(email, password)
   }
 }

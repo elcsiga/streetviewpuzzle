@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapModule } from './map/map.module';
 import { AuthModule } from './auth/auth.module';
+import { GameModule } from './game/game.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { AuthModule } from './auth/auth.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     MapModule,
-    AuthModule
+    AuthModule,
+    GameModule
   ],
   providers: [],
   bootstrap: [AppComponent]

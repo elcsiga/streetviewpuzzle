@@ -26,10 +26,7 @@ export class StreetViewComponent implements OnInit, OnDestroy {
       if (googleMaps) {
         this.panorama = new googleMaps.StreetViewPanorama(
           document.querySelector('.panorama-container'), {
-            addressControl: false,
-            linksControl: false,
-            panControl: false,
-            enableCloseButton: false,
+            disableDefaultUI: true,
             ...this.view
           });
       }

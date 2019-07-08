@@ -12,7 +12,9 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$streetviewpuzzle-primary: mat-palette($mat-indigo);
+$primary-color: $mat-teal;
+
+$streetviewpuzzle-primary: mat-palette($primary-color);
 $streetviewpuzzle-accent: mat-palette($mat-pink, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
@@ -30,3 +32,20 @@ $streetviewpuzzle-theme: mat-light-theme($streetviewpuzzle-primary, $streetviewp
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+section {
+    margin: 1.5rem 2rem;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: mat-color(map-get($streetviewpuzzle-theme, primary));
+    // font-family: 'Lakki Reddy', cursive;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
