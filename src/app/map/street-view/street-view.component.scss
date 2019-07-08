@@ -1,0 +1,15 @@
+.panorama-container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    top: 0;
+}
+.patch {
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 80px;
+    height: 35px;
+}
