@@ -3,16 +3,7 @@ import { Component } from '@angular/core';
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDzYb3ey234dwhBH7I9aM8itjLWoSbWZyA",
-  authDomain: "streetviewpuzzle.firebaseapp.com",
-  databaseURL: "https://streetviewpuzzle.firebaseio.com",
-  projectId: "streetviewpuzzle",
-  storageBucket: "",
-  messagingSenderId: "1054405125888",
-  appId: "1:1054405125888:web:410312271a12b570"
-};
+import * as privateAppConfig from '../../app-config-private.json';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +14,7 @@ export class AppComponent {
   title = 'streetviewpuzzle';
 
   constructor() {
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(privateAppConfig.firebase);
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
