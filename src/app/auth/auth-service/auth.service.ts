@@ -4,44 +4,56 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import * as privateAppConfig from '../../../../app-config-private.json';
+import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
+export interface User {
+  displayName: string;
+  email: string;
+  emailVerified: boolean;
+  photoURL: string;
+  isAnonymous: boolean;
+  uid: string;
+  providerData: any;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
+
+  user$ = new BehaviorSubject<User>(undefined);
 
   init() {
     firebase.initializeApp(privateAppConfig.firebase);
-
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        console.log('AUTH', user);
-        // User is signed in.
-        // var displayName = user.displayName;
-        // var email = user.email;
-        // var emailVerified = user.emailVerified;
-        // var photoURL = user.photoURL;
-        // var isAnonymous = user.isAnonymous;
-        // var uid = user.uid;
-        // var providerData = user.providerData;
-        // ...
-      } else {
-        console.log('AUTHOUT');
-        // ...
-      }
+    firebase.auth().onAuthStateChanged(user => {
+      this.user$.next(user);
     });
   }
 
-
   register(email: string, password: string) {
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then( re => console.log('REG', re))
-    .catch( error => console.error('REG', error));
+    return firebase.auth().createUserWithEmailAndPassword(email, password);
   } 
   
   login(email: string, password: string) {
-    return firebase.auth().signInWithEmailAndPassword(email, password)
+    return firebase.auth().signInWithEmailAndPassword(email, password);
+  }
+
+  signInWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('profile');
+    provider.addScope('email');
+    return firebase.auth().signInWithRedirect(provider);
+  }
+  
+  signInWithFacebook() {
+
+  }
+
+  logout() {
+    return firebase.auth().signOut();
   }
 }

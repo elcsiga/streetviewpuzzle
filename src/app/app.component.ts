@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from './auth/auth-service/auth.service';
 import { MapService } from './map/map/map.service';
-import { RouterOutlet } from '@angular/router';
 import { routeAnimation } from './animations';
 
 @Component({
@@ -11,21 +10,17 @@ import { routeAnimation } from './animations';
   animations: [ routeAnimation ]
 })
 export class AppComponent {
-  title = 'streetviewpuzzle';
-
+  user$ = this.authService.user$;
+  
   constructor(
     private authService: AuthService,
-    private mapsService: MapService,
-    
+    private mapsService: MapService
   ) {
-    authService.init();
-    mapsService.init();
+    this.authService.init();
+    this.mapsService.init();
   }
 
-  prepareRoute(outlet: RouterOutlet) {
-    console.log('jjjj');
-    return 'x';
-    // return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+  logout() {
+    this.authService.logout();
   }
-
 }

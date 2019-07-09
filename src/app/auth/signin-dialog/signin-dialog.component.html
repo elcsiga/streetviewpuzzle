@@ -2,10 +2,19 @@
   <mat-progress-bar [style.visibility]="inProgress ? 'visible' : 'hidden'" mode="indeterminate">
   </mat-progress-bar>
   <section>
-    <h1>Register</h1>
+    <h1>Sign In</h1>
+    <div class="kit-button-row">
+      <button class="google kit-wide-button" mat-flat-button (click)="signInWithGoogle()">
+        Sign in with Google
+      </button>
+      <button class="facebook kit-wide-button" mat-flat-button (click)="signInWithFacebook()">
+        Sign in with Facebook
+      </button>
+    </div>
   </section>
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <section>
+      <p>... or log in with email and password:</p>
       <div>
         <mat-form-field class="kit-full-width" appearance="outline">
           <mat-label>E-mail</mat-label>
@@ -18,15 +27,16 @@
           <input type="password" matInput formControlName="password">
         </mat-form-field>
       </div>
-    </section>
-    <section>
       <div class="kit-button-row">
         <span class="kit-separator"></span>
         <a mat-button routerLink="/">Cancel</a>
         <button mat-flat-button type="submit" [disabled]="inProgress" color="primary">
-          Regsiter
+          Login
         </button>
       </div>
+    </section>
+    <section>
+      Do not have an account? <a routerLink="/register">Register</a>
     </section>
   </form>
 </app-dialog>

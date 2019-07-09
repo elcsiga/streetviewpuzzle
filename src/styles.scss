@@ -34,18 +34,48 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 section {
-    margin: 1.5rem 2rem;
+    margin: 2rem 2rem;
 }
 h1, h2, h3, h4, h5, h6 {
     color: mat-color(map-get($streetviewpuzzle-theme, primary));
     // font-family: 'Lakki Reddy', cursive;
 }
 
-.clearfix:before,
-.clearfix:after {
-    content: " ";
-    display: table;
+.kit-primary-bg {
+    background-color: mat-color(map-get($streetviewpuzzle-theme, primary));
+    color: white;
 }
-.clearfix:after {
-    clear: both;
+.kit-clearfix {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+.kit-full-width {
+    width: 100%;
+}
+
+.kit-button-row {
+    margin: 0 -.2rem;
+    display: flex;
+    flex-wrap: wrap;
+
+    > a, > button {
+        margin: .2rem;
+    }
+
+    > .kit-separator {
+        flex: 1 1 auto;
+    }
+}
+
+button.kit-wide-button {
+    @media screen and (max-width: 480px) {
+        width: 100%;
+    }
 }

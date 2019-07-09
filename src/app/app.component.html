@@ -1,4 +1,3 @@
-<!--
 <app-street-view>
 </app-street-view>
 <div class="logo">
@@ -6,16 +5,28 @@
     &nbsp;View<br />
     &nbsp;&nbsp;Puzzle
 </div>
--->
-<div class="header">
-    <a mat-button routerLink="/login">
-        Log in
-    </a>
-    <button mat-flat-button color="primary" routerLink="/register">
-        Sign up
+
+<div class="header" *ngIf="(user$ | async) as user">
+    <button class="mat-elevation-z10" mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon *ngIf="!user.photoURL">person</mat-icon>
+        <img *ngIf="user.photoURL" class="avatar" [src]="user.photoURL" [alt]="user.email">
+    </button>
+    <mat-menu #menu="matMenu">
+        <div [style.padding]="'1rem'" class="kit-primary-bg">
+            {{user.displayName || user.email }}
+        </div>
+        <button mat-menu-item (click)="logout()">
+            <mat-icon>power_settings_new</mat-icon>
+            <span>Log out</span>
+        </button>
+    </mat-menu>
+</div>
+<div class="header" *ngIf="(user$ | async) === null">
+    <button class="mat-elevation-z10" mat-flat-button color="primary" routerLink="/signin">
+        Sign in
     </button>
 </div>
 
-<div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']"  class="content">
+<div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']" class="content">
     <router-outlet #o="outlet"></router-outlet>
 </div>
