@@ -1,3 +1,4 @@
+<!--
 <app-street-view>
 </app-street-view>
 <div class="logo">
@@ -5,6 +6,16 @@
     &nbsp;View<br />
     &nbsp;&nbsp;Puzzle
 </div>
-<div class="content">
-    <router-outlet></router-outlet>
+-->
+<div class="header">
+    <a mat-button routerLink="/login">
+        Log in
+    </a>
+    <button mat-flat-button color="primary" routerLink="/register">
+        Sign up
+    </button>
+</div>
+
+<div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']"  class="content">
+    <router-outlet #o="outlet"></router-outlet>
 </div>

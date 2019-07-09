@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapModule } from './map/map.module';
 import { AuthModule } from './auth/auth.module';
 import { GameModule } from './game/game.module';
+import { MaterialModule } from './material/material.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { GameModule } from './game/game.module';
     BrowserAnimationsModule,
     MapModule,
     AuthModule,
+    MaterialModule,
     GameModule
   ],
   providers: [],

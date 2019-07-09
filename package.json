@@ -10,8 +10,8 @@
     "e2e": "ng e2e",
     "firebase": "firebase",
     "fb-login": "firebase login",
-    "fb-init": "firebase init",
-    "fb-deploy": "firebase deploy"
+    "fb-deploy": "firebase deploy",
+    "deploy": "ng build --prod && npm run fb-deploy"
   },
   "private": true,
   "dependencies": {

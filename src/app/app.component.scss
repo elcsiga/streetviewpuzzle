@@ -26,3 +26,13 @@
 
     color: #000;
 }
+
+.header {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: .5em;
+
+    text-align: right;
+}
