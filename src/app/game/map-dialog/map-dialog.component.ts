@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PanoView } from 'src/app/common';
 import { MapService } from 'src/app/map/map/map.service';
-import { runInThisContext } from 'vm';
-
 @Component({
   selector: 'app-map-dialog',
   templateUrl: './map-dialog.component.html',
