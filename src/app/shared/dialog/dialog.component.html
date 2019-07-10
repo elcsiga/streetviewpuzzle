@@ -1,5 +1,11 @@
 <div class="dialog">
-    <div class="kit-clearfix mat-elevation-z20">
-        <ng-content></ng-content>        
+    <div class="content kit-clearfix mat-elevation-z20">
+        <ng-content></ng-content>
+        <div class="close">
+            <button routerLink="/" mat-icon-button>
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
     </div>
+
 </div>

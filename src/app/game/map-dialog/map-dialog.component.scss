@@ -1,5 +1,9 @@
 .map {
     width: 100%;
-    height: 300px;
-    background-color: gray
+    height: 400px;
+    background-color: gray;
+
+    @media screen and (max-width: 480px) {
+      height: 100%;
+    }
 }
