@@ -10,17 +10,11 @@ import { routeAnimation } from './animations';
   animations: [ routeAnimation ]
 })
 export class AppComponent {
-  user$ = this.authService.user$;
-  
   constructor(
     private authService: AuthService,
     private mapsService: MapService
   ) {
     this.authService.init();
     this.mapsService.init();
-  }
-
-  logout() {
-    this.authService.logout();
   }
 }

@@ -1,0 +1,20 @@
+<div *ngIf="(user$ | async) as user">
+    <button class="mat-elevation-z10" mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon *ngIf="!user.photoURL">person</mat-icon>
+        <img *ngIf="user.photoURL" class="avatar" [src]="user.photoURL" [alt]="user.email">
+    </button>
+    <mat-menu #menu="matMenu">
+        <div [style.padding]="'1rem'" class="kit-primary-bg">
+            {{user.displayName || user.email }}
+        </div>
+        <button mat-menu-item (click)="logout()">
+            <mat-icon>power_settings_new</mat-icon>
+            <span>Log out</span>
+        </button>
+    </mat-menu>
+</div>
+<div *ngIf="(user$ | async) === null">
+    <button class="mat-elevation-z10" mat-flat-button color="primary" routerLink="/signin">
+        Sign in
+    </button>
+</div>

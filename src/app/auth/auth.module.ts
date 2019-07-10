@@ -6,11 +6,13 @@ import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { UserMenuComponent } from './user-menu/user-menu.component';
 
 @NgModule({
   declarations: [
     SignInDialogComponent,
-    RegisterDialogComponent
+    RegisterDialogComponent,
+    UserMenuComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import { RouterModule } from '@angular/router';
   ],
   exports: [
     SignInDialogComponent,
-    RegisterDialogComponent
+    RegisterDialogComponent,
+    UserMenuComponent
   ]
 })
 export class AuthModule { }
