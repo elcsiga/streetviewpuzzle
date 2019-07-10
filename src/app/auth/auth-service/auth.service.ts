@@ -6,6 +6,7 @@ import "firebase/firestore";
 import * as privateAppConfig from '../../../../app-config-private.json';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 export interface User {
   displayName: string;
@@ -54,6 +55,7 @@ export class AuthService {
   }
 
   logout() {
+    this.router.navigate(['/']);
     return firebase.auth().signOut();
   }
 }

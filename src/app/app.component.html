@@ -6,8 +6,15 @@
     &nbsp;&nbsp;Puzzle
 </div>
 
-<div class="header">
+<div class="top-bar"></div>
+<div class="bottom-bar"></div>
+
+<div class="top-right">
     <app-user-menu></app-user-menu>
+</div>
+
+<div class="bottom-right">
+    <app-edit-menu></app-edit-menu>
 </div>
 
 <div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']" class="content">

@@ -3,17 +3,29 @@ import { Routes, RouterModule } from '@angular/router';
 import { SignInDialogComponent } from './auth/signin-dialog/signin-dialog.component';
 import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
 import { HomeComponent } from './game/home/home.component';
+import { SimplePuzzleDialogComponent } from './game/simple-puzzle-dialog/simple-puzzle-dialog.component';
+import { MapDialogComponent } from './game/map-dialog/map-dialog.component';
 
 const routes: Routes = [
   {
     path: 'signin',
     component: SignInDialogComponent,
-    data: { animation: 'dialog1' }
+    data: { animation: 'signin' }
   },
   {
     path: 'register',
     component: RegisterDialogComponent,
-    data: { animation: 'dialog2' }
+    data: { animation: 'register' }
+  },
+  {
+    path: 'add-simple-puzzle',
+    component: SimplePuzzleDialogComponent,
+    data: { animation: 'add-simple-puzzle' }
+  },
+  {
+    path: 'map',
+    component: MapDialogComponent,
+    data: { animation: 'map' }
   },
   { path: '**', component: HomeComponent }
 ];

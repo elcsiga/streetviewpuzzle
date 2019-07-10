@@ -1,0 +1,38 @@
+<app-dialog>
+    <mat-progress-bar [style.visibility]="inProgress ? 'visible' : 'hidden'" mode="indeterminate">
+    </mat-progress-bar>
+    <section>
+        <h1>New Puzzle</h1>
+    </section>
+    <form [formGroup]="puzzleForm" (ngSubmit)="onSubmit()">
+        <section>
+            <div>
+                <mat-form-field class="kit-full-width" appearance="outline">
+                    <mat-label>Title</mat-label>
+                    <input type="text" matInput formControlName="title">
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field class="kit-full-width" appearance="outline">
+                    <mat-label>Question</mat-label>
+                    <input type="text" matInput formControlName="question">
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field class="kit-full-width" appearance="outline">
+                    <mat-label>Answer</mat-label>
+                    <input type="text" matInput formControlName="answer">
+                </mat-form-field>
+            </div>
+        </section>
+        <section>
+            <div class="kit-button-row">
+                <span class="kit-separator"></span>
+                <a mat-button routerLink="/">Cancel</a>
+                <button mat-flat-button type="submit" [disabled]="inProgress" color="primary">
+                    Create puzzle
+                </button>
+            </div>
+        </section>
+    </form>
+</app-dialog>
