@@ -1,65 +1,73 @@
 import { Component, OnInit, OnDestroy, Input, OnChanges, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { MapService } from '../map.service';
-import { PanoView, PanoPos, PanoPov } from 'src/app/map/common';
+import { PanoView, PanoPos, PanoPov, panoPovEquals, panoPosEquals } from 'src/app/map/common';
+import { combineLatest, Subject } from 'rxjs';
+import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-street-view',
   templateUrl: './street-view.component.html',
   styleUrls: ['./street-view.component.scss']
 })
-export class StreetViewComponent implements OnInit, OnChanges, OnDestroy {
-
-  @Input() view: PanoView;
-  @Output() posChange = new EventEmitter<PanoPos>();
-  @Output() povChange = new EventEmitter<PanoPov>();
+export class StreetViewComponent implements OnInit, OnDestroy {
 
   private panorama;
 
   currentPos$ = this.mapService.currentPos$;
+  onDestroy$ = new Subject();
 
   constructor(
     private mapService: MapService
   ) { }
 
   ngOnInit() {
-    this.mapService.googleMaps$.subscribe(googleMaps => {
-      if (googleMaps) {
-        this.panorama = new googleMaps.StreetViewPanorama(
-          document.querySelector('.panorama-container'), {
-            ...this.view,
-            disableDefaultUI: true,
-            motionTracking: false,
-          });
-
-        this.panorama.addListener('position_changed', () => {
-          this.posChange.emit(this.panorama.getPosition());
+  
+    combineLatest(
+      this.mapService.googleMaps$,
+      this.mapService.currentView$
+    ).pipe(
+      take(1),
+      takeUntil(this.onDestroy$)
+    ).subscribe(([googleMaps, currentView]) => {
+      this.panorama = new googleMaps.StreetViewPanorama(
+        document.querySelector('.panorama-container'), {
+          ...currentView,
+          showRoadLabels: false,
+          disableDefaultUI: true,
+          motionTracking: false,
         });
 
-        this.panorama.addListener('pov_changed', () => {
-          this.povChange.emit(this.panorama.getPov());
-        });
+      this.panorama.addListener('position_changed', () => {
+        this.mapService.currentPos$.next(this.panorama.getPosition());
+      });
 
-        // const cafeMarker = new googleMaps.Marker({
-        //   position: { lat: 37.869260, lng: -122.254811 },
-        //   map: this.panorama,
-        //   icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe|FFFF00',
-        //   title: 'Cafe'
-        // });
-      }
+      this.panorama.addListener('pov_changed', () => {
+        this.mapService.currentPov$.next(this.panorama.getPov());
+      });
+
+      this.mapService.currentPos$.pipe(
+        distinctUntilChanged( panoPosEquals ),
+        takeUntil( this.onDestroy$ )
+      ).subscribe( currentPos => this.panorama.setPosition(currentPos));
+      
+      this.mapService.currentPov$.pipe(
+        distinctUntilChanged( panoPovEquals ),
+        takeUntil( this.onDestroy$ )
+      ).subscribe( currentPov => this.panorama.setPov(currentPov));
+      
     });
-  }
 
-  ngOnChanges() {
-    if (this.panorama) {
-      this.panorama.getPosition(this.view.position);
-      this.panorama.setPov(this.view.pov);
-    }
-
-    // TODO zoom?
-
+ 
+    
+    // const cafeMarker = new googleMaps.Marker({
+    //   position: { lat: 37.869260, lng: -122.254811 },
+    //   map: this.panorama,
+    //   icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe|FFFF00',
+    //   title: 'Cafe'
+    // });
   }
 
   ngOnDestroy() {
-    // TODO this.panorama.destroy?
+    this.onDestroy$.next();
   }
 }

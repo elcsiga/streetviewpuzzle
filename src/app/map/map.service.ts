@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import loadGoogleMapsApi from 'load-google-maps-api';
 import * as appConfig from '../../../app-config-private.json';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 import { PanoView, PanoPos, PanoPov } from './common.js';
 
 @Injectable({
@@ -11,7 +11,10 @@ import { PanoView, PanoPos, PanoPov } from './common.js';
 export class MapService {
 
   private panorama;
-  googleMaps$ = new BehaviorSubject(null);
+  private googleMaps = new BehaviorSubject(null);
+  googleMaps$ = this.googleMaps.pipe(
+    filter( m => !!m)
+  );
 
   constructor() { }
 
@@ -20,8 +23,8 @@ export class MapService {
       key: appConfig.maps.apiKey
     }).then(googleMaps => {
       console.log('Maps API loaded...');
-      this.googleMaps$.next(googleMaps);
-    }).catch(function (error) {
+      this.googleMaps.next(googleMaps);
+    }).catch(error => {
       console.error('Maps API loading failed!', error);
     })
   }
