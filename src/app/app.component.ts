@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from './auth/auth-service/auth.service';
-import { MapService } from './map/map/map.service';
+import { MapService } from './map/map.service';
 import { routeAnimation } from './animations';
 
 @Component({
@@ -10,11 +10,14 @@ import { routeAnimation } from './animations';
   animations: [ routeAnimation ]
 })
 export class AppComponent {
+
+  currentView$ = this.mapService.currentView$;
+  
   constructor(
     private authService: AuthService,
-    private mapsService: MapService
+    private mapService: MapService
   ) {
     this.authService.init();
-    this.mapsService.init();
+    this.mapService.init();
   }
 }

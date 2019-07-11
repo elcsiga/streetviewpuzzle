@@ -1,21 +1,21 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { MapService } from '../map/map.service';
-import { PanoView } from 'src/app/common';
+import { Component, OnInit, OnDestroy, Input, OnChanges, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { MapService } from '../map.service';
+import { PanoView, PanoPos, PanoPov } from 'src/app/map/common';
 
 @Component({
   selector: 'app-street-view',
   templateUrl: './street-view.component.html',
   styleUrls: ['./street-view.component.scss']
 })
-export class StreetViewComponent implements OnInit, OnDestroy {
+export class StreetViewComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() view: PanoView = {
-    position: { lat: 37.869260, lng: -122.254811 },
-    pov: { heading: 165, pitch: 0 },
-    zoom: 1
-  };
+  @Input() view: PanoView;
+  @Output() posChange = new EventEmitter<PanoPos>();
+  @Output() povChange = new EventEmitter<PanoPov>();
 
   private panorama;
+
+  currentPos$ = this.mapService.currentPos$;
 
   constructor(
     private mapService: MapService
@@ -26,10 +26,18 @@ export class StreetViewComponent implements OnInit, OnDestroy {
       if (googleMaps) {
         this.panorama = new googleMaps.StreetViewPanorama(
           document.querySelector('.panorama-container'), {
+            ...this.view,
             disableDefaultUI: true,
-            motionTrackingControl: false,
-            ...this.view
+            motionTracking: false,
           });
+
+        this.panorama.addListener('position_changed', () => {
+          this.posChange.emit(this.panorama.getPosition());
+        });
+
+        this.panorama.addListener('pov_changed', () => {
+          this.povChange.emit(this.panorama.getPov());
+        });
 
         // const cafeMarker = new googleMaps.Marker({
         //   position: { lat: 37.869260, lng: -122.254811 },
@@ -39,6 +47,16 @@ export class StreetViewComponent implements OnInit, OnDestroy {
         // });
       }
     });
+  }
+
+  ngOnChanges() {
+    if (this.panorama) {
+      this.panorama.getPosition(this.view.position);
+      this.panorama.setPov(this.view.pov);
+    }
+
+    // TODO zoom?
+
   }
 
   ngOnDestroy() {

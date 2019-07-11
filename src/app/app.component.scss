@@ -33,6 +33,9 @@
     right: 0;
     left: 0;
     height: 100px;
+
+    pointer-events: none;
+    user-select: none;
 }
 .top-bar {
     top: 0;
