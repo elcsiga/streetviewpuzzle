@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import loadGoogleMapsApi from 'load-google-maps-api';
 import * as appConfig from '../../../app-config-private.json';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, take } from 'rxjs/operators';
 import { PanoView, PanoPos, PanoPov } from './common.js';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class MapService {
   private panorama;
   private googleMaps = new BehaviorSubject(null);
   googleMaps$ = this.googleMaps.pipe(
-    filter( m => !!m)
+    filter(m => !!m)
   );
 
   constructor() { }
@@ -29,15 +29,19 @@ export class MapService {
     })
   }
 
-  currentPos$ = new BehaviorSubject<PanoPos>({
+  private currentPos = new BehaviorSubject<PanoPos>({
     lat: 37.869260,
     lng: -122.254811
   });
+  currentPos$ = this.currentPos.asObservable();
+  setPos(pos: any) { this.currentPos.next({ lat: pos.lat(), lng: pos.lng() }) };
 
-  currentPov$ = new BehaviorSubject<PanoPov>({
+  private currentPov = new BehaviorSubject<PanoPov>({
     heading: 165,
     pitch: 0
   });
+  currentPov$ = this.currentPov.asObservable();
+  setPov(pov: any) { this.currentPov.next({ heading: pov.heading, pitch: pov.pitch }) };
 
   currentView$: Observable<PanoView> = combineLatest(
     this.currentPos$,
@@ -45,4 +49,10 @@ export class MapService {
   ).pipe(
     map(([position, pov]) => ({ position, pov, zoom: 1 }))
   );
+
+  getCurrentViewSnapshot(): PanoView {
+    let view: PanoView;
+    this.currentView$.pipe(take(1)).subscribe(w => view = w);
+    return view;
+  }
 }

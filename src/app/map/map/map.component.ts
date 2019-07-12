@@ -39,7 +39,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.heading = currentView.pov.heading;
 
       this.map.addListener('idle', () => {
-        this.mapService.currentPos$.next(this.map.getCenter());
+        this.mapService.setPos(this.map.getCenter());
       });
 
       this.mapService.currentPos$.pipe(

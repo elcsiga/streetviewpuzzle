@@ -38,11 +38,11 @@ export class StreetViewComponent implements OnInit, OnDestroy {
         });
 
       this.panorama.addListener('position_changed', () => {
-        this.mapService.currentPos$.next(this.panorama.getPosition());
+        this.mapService.setPos(this.panorama.getPosition());
       });
 
       this.panorama.addListener('pov_changed', () => {
-        this.mapService.currentPov$.next(this.panorama.getPov());
+        this.mapService.setPov(this.panorama.getPov());
       });
 
       this.mapService.currentPos$.pipe(
