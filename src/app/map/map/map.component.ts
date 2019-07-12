@@ -1,44 +1,60 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { MapService } from '../map.service';
-import { PanoPos } from '../common';
+import { PanoPos, panoPosEquals, panoPovEquals } from '../common';
+import { combineLatest, Subject } from 'rxjs';
+import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit {
-
-  @Input() pos: PanoPos = {
-    lat: 37.869260,
-    lng: -122.254811
-  };
-  @Output() posChange = new EventEmitter<PanoPos>();
+export class MapComponent implements OnInit, OnDestroy {
 
   private map;
+
+  heading = 0;
+
+  onDestroy$ = new Subject();
 
   constructor(
     private mapService: MapService
   ) { }
 
   ngOnInit() {
-    this.mapService.googleMaps$.subscribe(googleMaps => {
-      if (googleMaps) {
-        this.map = new googleMaps.Map(
-          document.querySelector('.map'), {
-            disableDefaultUI: true,
-            center: this.pos,
-            zoom: 16
-          });
-
-        this.map.addListener('center_changed', () => {
-          const center = this.map.getCenter();
-          this.posChange.emit({
-            lat: center.lat,
-            lng: center.lng
-          });
+    combineLatest(
+      this.mapService.googleMaps$,
+      this.mapService.currentView$
+    ).pipe(
+      take(1),
+      takeUntil(this.onDestroy$)
+    ).subscribe(([googleMaps, currentView]) => {
+      this.map = new googleMaps.Map(
+        document.querySelector('.map'), {
+          disableDefaultUI: true,
+          center: currentView.position,
+          zoom: 16
         });
-      }
+
+      this.heading = currentView.pov.heading;
+
+      this.map.addListener('idle', () => {
+        this.mapService.setPos(this.map.getCenter());
+      });
+
+      this.mapService.currentPos$.pipe(
+        distinctUntilChanged(panoPosEquals),
+        takeUntil(this.onDestroy$)
+      ).subscribe(currentPos => this.map.setCenter(currentPos));
+
+      this.mapService.currentPov$.pipe(
+        distinctUntilChanged( panoPovEquals ),
+        takeUntil( this.onDestroy$ )
+      ).subscribe( currentPov => this.heading = currentPov.heading);
     });
+  }
+
+  ngOnDestroy() {
+    this.onDestroy$.next();
   }
 }

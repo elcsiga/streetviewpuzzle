@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import loadGoogleMapsApi from 'load-google-maps-api';
 import * as appConfig from '../../../app-config-private.json';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { map, filter, take } from 'rxjs/operators';
 import { PanoView, PanoPos, PanoPov } from './common.js';
 
 @Injectable({
@@ -11,7 +11,10 @@ import { PanoView, PanoPos, PanoPov } from './common.js';
 export class MapService {
 
   private panorama;
-  googleMaps$ = new BehaviorSubject(null);
+  private googleMaps = new BehaviorSubject(null);
+  googleMaps$ = this.googleMaps.pipe(
+    filter(m => !!m)
+  );
 
   constructor() { }
 
@@ -20,21 +23,25 @@ export class MapService {
       key: appConfig.maps.apiKey
     }).then(googleMaps => {
       console.log('Maps API loaded...');
-      this.googleMaps$.next(googleMaps);
-    }).catch(function (error) {
+      this.googleMaps.next(googleMaps);
+    }).catch(error => {
       console.error('Maps API loading failed!', error);
     })
   }
 
-  currentPos$ = new BehaviorSubject<PanoPos>({
+  private currentPos = new BehaviorSubject<PanoPos>({
     lat: 37.869260,
     lng: -122.254811
   });
+  currentPos$ = this.currentPos.asObservable();
+  setPos(pos: any) { this.currentPos.next({ lat: pos.lat(), lng: pos.lng() }) };
 
-  currentPov$ = new BehaviorSubject<PanoPov>({
+  private currentPov = new BehaviorSubject<PanoPov>({
     heading: 165,
     pitch: 0
   });
+  currentPov$ = this.currentPov.asObservable();
+  setPov(pov: any) { this.currentPov.next({ heading: pov.heading, pitch: pov.pitch }) };
 
   currentView$: Observable<PanoView> = combineLatest(
     this.currentPos$,
@@ -42,4 +49,10 @@ export class MapService {
   ).pipe(
     map(([position, pov]) => ({ position, pov, zoom: 1 }))
   );
+
+  getCurrentViewSnapshot(): PanoView {
+    let view: PanoView;
+    this.currentView$.pipe(take(1)).subscribe(w => view = w);
+    return view;
+  }
 }
