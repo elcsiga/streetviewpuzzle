@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy, Input, OnChanges, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MapService } from '../map.service';
-import { PanoView, PanoPos, PanoPov, panoPovEquals, panoPosEquals } from 'src/app/map/common';
 import { combineLatest, Subject } from 'rxjs';
 import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { panoPosEquals, panoPovEquals } from 'functions/src/common/pano';
 
 @Component({
   selector: 'app-street-view',
@@ -21,7 +21,6 @@ export class StreetViewComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-  
     combineLatest(
       this.mapService.googleMaps$,
       this.mapService.currentView$

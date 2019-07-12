@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import loadGoogleMapsApi from 'load-google-maps-api';
-import * as appConfig from '../../../app-config-private.json';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, filter, take } from 'rxjs/operators';
-import { PanoView, PanoPos, PanoPov } from './common.js';
+import { PanoView, PanoPos, PanoPov } from 'functions/src/common/pano';
+import { mapsApiKey } from 'functions/src/common/map';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class MapService {
 
   init() {
     loadGoogleMapsApi({
-      key: appConfig.maps.apiKey
+      key: mapsApiKey
     }).then(googleMaps => {
       console.log('Maps API loaded...');
       this.googleMaps.next(googleMaps);

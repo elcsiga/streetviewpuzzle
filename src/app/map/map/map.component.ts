@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { MapService } from '../map.service';
-import { PanoPos, panoPosEquals, panoPovEquals } from '../common';
 import { combineLatest, Subject } from 'rxjs';
 import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { panoPosEquals, panoPovEquals } from 'functions/src/common/pano';
 
 @Component({
   selector: 'app-map',
@@ -11,7 +11,7 @@ import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 })
 export class MapComponent implements OnInit, OnDestroy {
 
-  private map;
+  private map: any;
 
   heading = 0;
 

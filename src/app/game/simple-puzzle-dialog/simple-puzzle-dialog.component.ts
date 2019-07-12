@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as firebase from "firebase/app";
-import { SimplePuzzle } from '../interfaces';
 import { AuthService } from 'src/app/auth/auth-service/auth.service';
 import { MapService } from 'src/app/map/map.service';
+import { SimplePuzzle } from 'functions/src/common/puzzle';
 
 @Component({
   selector: 'app-simple-puzzle-dialog',

@@ -1,4 +1,4 @@
-import { PanoView } from '../map/common';
+import { PanoView } from './pano';
 
 export interface SimplePuzzle {
     startView: PanoView;
