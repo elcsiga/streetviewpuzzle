@@ -42,7 +42,7 @@ export class SimplePuzzleDialogComponent implements OnInit {
       author: this.authService.user$.value.email
     }
 
-    db.collection("simple-puzzles").add(puzzle)
+    db.collection("puzzles").add(puzzle)
       .then(function (docRef) {
         console.log("Document written with ID: ", docRef.id);
       })

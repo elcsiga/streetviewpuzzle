@@ -1,20 +1,24 @@
 import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import { SimplePuzzle } from '../../src/app/game/interfaces';
+
+admin.initializeApp();
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
-export const helloWorld = functions.region('europe-west1').https.onRequest((request, response) => {
-  response.send("Hello from Firebase!");
-});
-
 export const createThumbnail = functions.region('europe-west1').firestore
-  .document('puzzles/{puzzleId}')
-  .onCreate((doc, context) => {
-    const puzzleId = context.params.puzzleId;
-    const puzzle = doc.data();
+    .document('puzzles/{puzzleId}')
+    .onCreate((doc, context) => {
+        console.log('createThumbnail runs');
+        const puzzleId = context.params.puzzleId;
+        const puzzle = doc.data() as SimplePuzzle;
 
-    return doc.ref.set({
-        thumbnail: puzzleId
-    }, { merge: true })
-    
-  );
+        console.log('puzzle', puzzle);
+        console.log('puzzleId', puzzleId);
+
+        return doc.ref.set({
+            title: puzzle.title + 'x',
+            thumbnail: puzzleId
+        }, { merge: true });
+    });
