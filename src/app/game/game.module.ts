@@ -11,7 +11,6 @@ import { MapDialogComponent } from './map-dialog/map-dialog.component';
 import { MapModule } from '../map/map.module';
 import { PuzzleCardComponent } from './puzzle-card/puzzle-card.component';
 
-
 @NgModule({
   declarations: [
     HomeComponent,
