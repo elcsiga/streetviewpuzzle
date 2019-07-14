@@ -18,8 +18,8 @@ export const createThumbnail = functions.region('europe-west1').firestore
         const pov = puzzle.startView.pov;
         const fov = 90;
         const width = 600;
-        const height = 400;
- 
+        const height = 200;
+
         const streetviewApiUrl = 'https://maps.googleapis.com/maps/api/streetview'
             + `?size=${width}x${height}`
             + `&location=${pos.lat},${pos.lng}`
@@ -45,5 +45,22 @@ export const createThumbnail = functions.region('europe-west1').firestore
 
         await doc.ref.set({
             thumbnail: fileUrl
-        },{ merge: true});
+        }, { merge: true });
     });
+
+export const createUser = functions.auth.user().onCreate( authUser => {
+    const userRecord = {
+        // TODO workaround, see https://github.com/firebase/firebase-functions/issues/270#issuecomment-457759775
+        authUser: JSON.parse(JSON.stringify(authUser.toJSON()))
+    }
+    const uid = authUser.uid;
+
+    console.log('Storinh user to db:', userRecord);
+
+    return admin.firestore().collection('users').doc(uid).set(userRecord)
+    .then(() => {
+        console.log('User successfully created.');
+    }).catch((e) => {
+        console.error('Error while creating user.', e);
+    });
+})

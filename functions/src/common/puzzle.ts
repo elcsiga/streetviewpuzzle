@@ -5,5 +5,6 @@ export interface SimplePuzzle {
     title: string;
     question: string;
     answers: string[];
+    thumbnail: string;
     author: string;
 }

@@ -9,10 +9,17 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MapDialogComponent } from './map-dialog/map-dialog.component';
 import { MapModule } from '../map/map.module';
+import { PuzzleCardComponent } from './puzzle-card/puzzle-card.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, EditMenuComponent, SimplePuzzleDialogComponent, MapDialogComponent],
+  declarations: [
+    HomeComponent,
+    EditMenuComponent,
+    SimplePuzzleDialogComponent,
+    MapDialogComponent,
+    PuzzleCardComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,

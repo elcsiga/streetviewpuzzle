@@ -30,14 +30,14 @@ export class MapService {
   }
 
   private currentPos = new BehaviorSubject<PanoPos>({
-    lat: 37.869260,
-    lng: -122.254811
+    lat: 47.49801,
+    lng: 19.03991
   });
   currentPos$ = this.currentPos.asObservable();
   setPos(pos: any) { this.currentPos.next({ lat: pos.lat(), lng: pos.lng() }) };
 
   private currentPov = new BehaviorSubject<PanoPov>({
-    heading: 165,
+    heading: 100,
     pitch: 0
   });
   currentPov$ = this.currentPov.asObservable();

@@ -39,15 +39,18 @@ export class SimplePuzzleDialogComponent implements OnInit {
       title: this.puzzleForm.value.title,
       question: this.puzzleForm.value.question,
       answers: [this.puzzleForm.value.answer],
-      author: this.authService.user$.value.email
+      author: this.authService.user$.value.uid,
+      thumbnail: null // wil be added by the createThumbnail() cloud funtzion
     }
 
     db.collection("puzzles").add(puzzle)
-      .then(function (docRef) {
-        console.log("Document written with ID: ", docRef.id);
+      .then( () => {
+        this.router.navigate(['/']);
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.error("Error adding document: ", error);
+
+        // TODO
       });
   }
 }
