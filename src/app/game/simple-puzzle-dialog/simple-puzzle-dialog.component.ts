@@ -39,8 +39,11 @@ export class SimplePuzzleDialogComponent implements OnInit {
       title: this.puzzleForm.value.title,
       question: this.puzzleForm.value.question,
       answers: [this.puzzleForm.value.answer],
-      author: this.authService.user$.value.uid,
-      thumbnail: null // wil be added by the createThumbnail() cloud funtzion
+      author: {
+        uid: this.authService.user$.value.uid,
+        publicUser: null // will be added by the onCreatePuzzle() cloud funtzion
+      },
+      thumbnail: null // wil be added by the onCreatePuzzle() cloud funtzion
     }
 
     db.collection("puzzles").add(puzzle)

@@ -3,10 +3,12 @@ import * as admin from 'firebase-admin';
 import * as https from 'https';
 import { SimplePuzzle } from './common/puzzle';
 import { mapsApiKey } from './common/map';
+import { PublicUser, User } from './common/auth';
+import { UserRecord } from 'firebase-functions/lib/providers/auth';
 
 admin.initializeApp();
 
-export const createThumbnail = functions.region('europe-west1').firestore
+export const onCreatePuzzle = functions.firestore
     .document('puzzles/{puzzleId}')
     .onCreate(async (doc, context) => {
         const puzzleId = context.params.puzzleId;
@@ -40,16 +42,28 @@ export const createThumbnail = functions.region('europe-west1').firestore
                 });
         });
 
+        const userSnapshot = await admin.firestore().collection('users').doc(puzzle.author.uid).get();
+        const publicUser = (userSnapshot.data() as User).publicUser;
         const fileUrl = `https://firebasestorage.googleapis.com/v0/b/streetviewpuzzle.appspot.com/o/${puzzleId}?alt=media`;
         console.log('Thumbnail url: ', fileUrl);
 
         await doc.ref.set({
-            thumbnail: fileUrl
+            thumbnail: fileUrl,
+            author: {
+                uid: puzzle.author.uid,
+                publicUser
+            }
         }, { merge: true });
     });
 
-export const createUser = functions.auth.user().onCreate( authUser => {
-    const userRecord = {
+export const onCreateUser = functions.auth.user().onCreate( async (authUser: UserRecord) => {
+
+    const publicUser: PublicUser = {
+        visualName: authUser.displayName || (typeof authUser.email === 'string' ? authUser.email.split('@')[0] : '?'),
+        avatarUrl: authUser.photoURL
+    }
+    const userRecord: User = {
+        publicUser: publicUser,
         // TODO workaround, see https://github.com/firebase/firebase-functions/issues/270#issuecomment-457759775
         authUser: JSON.parse(JSON.stringify(authUser.toJSON()))
     }

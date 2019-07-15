@@ -1,4 +1,5 @@
 import { PanoView } from './pano';
+import { PublicUser } from './auth';
 
 export interface SimplePuzzle {
     startView: PanoView;
@@ -6,5 +7,9 @@ export interface SimplePuzzle {
     question: string;
     answers: string[];
     thumbnail: string;
-    author: string;
+    author: {
+        uid: string;
+        publicUser: PublicUser | null
+    } 
+
 }
