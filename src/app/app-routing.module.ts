@@ -5,6 +5,7 @@ import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.
 import { HomeComponent } from './game/home/home.component';
 import { SimplePuzzleDialogComponent } from './game/simple-puzzle-dialog/simple-puzzle-dialog.component';
 import { MapDialogComponent } from './game/map-dialog/map-dialog.component';
+import { PuzzleEditorComponent } from './game/puzzle-editor/puzzle-editor.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,11 @@ const routes: Routes = [
     path: 'map',
     component: MapDialogComponent,
     data: { animation: 'map' }
+  },
+  {
+    path: 'editor',
+    component: PuzzleEditorComponent,
+    data: { animation: 'editor' }
   },
   { path: '**', component: HomeComponent }
 ];
