@@ -30,8 +30,11 @@ import { PuzzleEditorComponent } from './puzzle-editor/puzzle-editor.component';
     MapModule
   ],
   exports: [
-    HomeComponent, 
-    EditMenuComponent, SimplePuzzleDialogComponent, MapDialogComponent, PuzzleEditorComponent
+    HomeComponent,
+    EditMenuComponent,
+    SimplePuzzleDialogComponent,
+    MapDialogComponent,
+    PuzzleEditorComponent
   ]
 })
 export class GameModule { }
