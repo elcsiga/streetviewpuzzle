@@ -8,55 +8,72 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 
 admin.initializeApp();
 
-export const onCreatePuzzle = functions.firestore
-    .document('puzzles/{puzzleId}')
-    .onCreate(async (doc, context) => {
-        const puzzleId = context.params.puzzleId;
-        const puzzle = doc.data() as SimplePuzzle;
+const updatePuzzle = async (doc: FirebaseFirestore.DocumentSnapshot) => {
+    const puzzle = doc.data() as SimplePuzzle;
+    const puzzleId = doc.id;
 
-        console.log('Creating thumbnail for ', puzzleId);
+    console.log('Creating thumbnail for ', puzzleId);
 
-        const pos = puzzle.startView.position;
-        const pov = puzzle.startView.pov;
-        const fov = 90;
-        const width = 600;
-        const height = 200;
+    const pos = puzzle.startView.position;
+    const pov = puzzle.startView.pov;
+    const fov = 90;
+    const width = 600;
+    const height = 200;
 
-        const streetviewApiUrl = 'https://maps.googleapis.com/maps/api/streetview'
-            + `?size=${width}x${height}`
-            + `&location=${pos.lat},${pos.lng}`
-            + `&fov=${fov}`
-            + `&heading=${pov.heading}&pitch=${pov.pitch}`
-            + `&key=${mapsApiKey}`;
+    const streetviewApiUrl = 'https://maps.googleapis.com/maps/api/streetview'
+        + `?size=${width}x${height}`
+        + `&location=${pos.lat},${pos.lng}`
+        + `&fov=${fov}`
+        + `&heading=${pov.heading}&pitch=${pov.pitch}`
+        + `&key=${mapsApiKey}`;
 
-        const file = admin.storage().bucket().file(puzzleId);
-        await new Promise((resolve, reject) => {
-            https.get(streetviewApiUrl, response => response.pipe(file.createWriteStream()))
-                .on('finish', () => {
-                    console.log('Thumbnail created for ', puzzleId);
-                    resolve();
-                })
-                .on('error', (e) => {
-                    console.error('Error while uploading thumbnail for ', puzzleId);
-                    reject();
-                });
-        });
-
-        const userSnapshot = await admin.firestore().collection('users').doc(puzzle.author.uid).get();
-        const publicUser = (userSnapshot.data() as User).publicUser;
-        const fileUrl = `https://firebasestorage.googleapis.com/v0/b/streetviewpuzzle.appspot.com/o/${puzzleId}?alt=media`;
-        console.log('Thumbnail url: ', fileUrl);
-
-        await doc.ref.set({
-            thumbnail: fileUrl,
-            author: {
-                uid: puzzle.author.uid,
-                publicUser
-            }
-        }, { merge: true });
+    const file = admin.storage().bucket().file(puzzleId);
+    await new Promise((resolve, reject) => {
+        https.get(streetviewApiUrl, response => response.pipe(file.createWriteStream()))
+            .on('finish', () => {
+                console.log('Thumbnail created for ', puzzleId);
+                resolve();
+            })
+            .on('error', (e) => {
+                console.error('Error while uploading thumbnail for ', puzzleId);
+                reject();
+            });
     });
 
-export const onCreateUser = functions.auth.user().onCreate( async (authUser: UserRecord) => {
+    const userSnapshot = await admin.firestore().collection('users').doc(puzzle.author.uid).get();
+    const publicUser = (userSnapshot.data() as User).publicUser;
+    const fileUrl = `https://firebasestorage.googleapis.com/v0/b/streetviewpuzzle.appspot.com/o/${puzzleId}?alt=media`;
+    console.log('Thumbnail url: ', fileUrl);
+
+    await doc.ref.set({
+        thumbnail: fileUrl,
+        author: {
+            uid: puzzle.author.uid,
+            publicUser
+        }
+    }, { merge: true });
+}
+
+export const onCreatePuzzle = functions.firestore
+    .document('puzzles/{puzzleId}')
+    .onCreate(async (doc) => {
+        await updatePuzzle(doc);
+    });
+
+export const onUpdatePuzzle = functions.firestore
+    .document('puzzles/{puzzleId}')
+    .onUpdate(async (change) => {
+        await updatePuzzle(change.after);
+    });
+
+export const onDeletePuzzle = functions.firestore
+    .document('puzzles/{puzzleId}')
+    .onDelete(async (doc) => {
+        const file = admin.storage().bucket().file(doc.id);
+        await file.delete();
+    });
+
+export const onRegisterUser = functions.auth.user().onCreate(async (authUser: UserRecord) => {
 
     const publicUser: PublicUser = {
         visualName: authUser.displayName || (typeof authUser.email === 'string' ? authUser.email.split('@')[0] : '?'),
@@ -72,9 +89,25 @@ export const onCreateUser = functions.auth.user().onCreate( async (authUser: Use
     console.log('Storinh user to db:', userRecord);
 
     return admin.firestore().collection('users').doc(uid).set(userRecord)
-    .then(() => {
-        console.log('User successfully created.');
-    }).catch((e) => {
-        console.error('Error while creating user.', e);
-    });
+        .then(() => {
+            console.log('User successfully created.');
+        }).catch((e) => {
+            console.error('Error while creating user.', e);
+        });
 })
+
+export const onUpdateUser = functions.firestore
+    .document('users/{uid}')
+    .onUpdate(async (change) => {
+        const userDoc = change.after;
+        const publicUser = (userDoc.data() as User).publicUser;
+
+        // updating user's puzzles
+        const batch = admin.firestore().batch();
+        const puzzles = await admin.firestore().collection('puzzles').where('authot/uid', "==", userDoc.id).select().get();
+        puzzles.docs.forEach( puzzleDoc => {
+            const puzzle = admin.firestore().collection("puzzles").doc(puzzleDoc.id);
+            batch.update(puzzle, { "author": publicUser });
+        })
+        await batch.commit();
+    });

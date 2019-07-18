@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MapDialogComponent } from './map-dialog/map-dialog.component';
 import { MapModule } from '../map/map.module';
 import { PuzzleCardComponent } from './puzzle-card/puzzle-card.component';
+import { EditorComponent } from './editor/editor.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { PuzzleCardComponent } from './puzzle-card/puzzle-card.component';
     EditMenuComponent,
     SimplePuzzleDialogComponent,
     MapDialogComponent,
-    PuzzleCardComponent
+    PuzzleCardComponent,
+    EditorComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,7 @@ import { PuzzleCardComponent } from './puzzle-card/puzzle-card.component';
   ],
   exports: [
     HomeComponent, 
-    EditMenuComponent, SimplePuzzleDialogComponent, MapDialogComponent
+    EditMenuComponent, SimplePuzzleDialogComponent, MapDialogComponent, EditorComponent
   ]
 })
 export class GameModule { }
