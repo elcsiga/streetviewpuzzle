@@ -1,7 +1,26 @@
-
+<div class='background'></div>
 <div class='puzzle-list'>
-    <app-puzzle-card 
-        *ngFor="let puzzle of puzzles"
-        [puzzle]="puzzle">
-    </app-puzzle-card>
+  <app-puzzle-card *ngFor="let puzzle of puzzles" [puzzle]="puzzle">
+  </app-puzzle-card>
+</div>
+
+<div class="bottom-right">
+  <button mat-fab [matMenuTriggerFor]="menu" color="primary" matTooltip="Create puzzle">
+    <mat-icon>add</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="/editor">
+      <mat-icon>question_answer </mat-icon>
+      <span>Create Simple Puzzle</span>
+    </button>
+    <button mat-menu-item disabled>
+      <mat-icon>location_on</mat-icon>
+      <span>Create Treasure Hunt</span>
+    </button>
+    <button mat-menu-item disabled>
+      <mat-icon>done_all</mat-icon>
+      <span>Create Mission</span>
+    </button>
+  </mat-menu>
 </div>

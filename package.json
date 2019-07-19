@@ -5,14 +5,15 @@
     "postinstall": "cd functions && npm install",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "check": "npm run lint && npm run build",
     "firebase": "firebase",
     "fb-login": "firebase login",
     "fb-deploy": "firebase deploy",
-    "deploy": "ng build --prod && npm run fb-deploy"
+    "deploy": "npm run lint && npm run build && npm run fb-deploy"
   },
   "private": true,
   "dependencies": {

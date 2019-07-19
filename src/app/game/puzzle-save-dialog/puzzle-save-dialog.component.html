@@ -1,0 +1,54 @@
+<app-dialog>
+    <mat-progress-bar [style.visibility]="inProgress ? 'visible' : 'hidden'" mode="indeterminate">
+    </mat-progress-bar>
+    <section>
+        <h1>Create Puzzle</h1>
+    </section>
+    <form [formGroup]="puzzleForm" (ngSubmit)="onSubmit()">
+        <section>
+            <div>
+                <mat-form-field class="kit-full-width">
+                    <mat-label>Title</mat-label>
+                    <input type="text" matInput formControlName="title">
+                    <mat-hint>This will appear on the thumbnail of the puzzle</mat-hint>
+                </mat-form-field>
+            </div>
+        </section>
+        <section>
+            <div class='details'>
+                <app-checkmark [valid]="checkTitle()"></app-checkmark>
+                <p class="title"> Title</p>
+                <p>{{puzzle.title || '-' }}</p>
+            </div>
+            <div class='details'>
+                <app-checkmark [valid]="checkPosition()"></app-checkmark>
+                <p class="title">Starting position</p>
+                <p>{{ printPos() }}</p>
+            </div>
+            <div class='details'>
+                <app-checkmark [valid]="checkQuestion()"></app-checkmark>
+                 <p class="title">Question</p>
+                <p>{{puzzle.question || '-' }}</p>
+            </div>
+            <div class='details'>
+                <app-checkmark [valid]="checkAnswers()"></app-checkmark>
+                <p class="title">Answers</p>
+                <p *ngFor="let answer of puzzle.answers">
+                    {{answer}}
+                </p>
+                <p *ngIf="puzzle.answers.length == 0">-</p>
+            </div>
+        </section>
+        <section>
+            <div class="kit-button-row">
+                <span class="kit-separator"></span>
+                <button mat-button type="button" (click)='close()'>
+                    Close
+                </button>
+                <button mat-flat-button type="submit" [disabled]="inProgress || !checkAll()" color="primary">
+                    Create puzzle
+                </button>
+            </div>
+        </section>
+    </form>
+</app-dialog>

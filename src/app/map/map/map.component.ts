@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { MapService } from '../map.service';
 import { combineLatest, Subject } from 'rxjs';
-import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
-import { panoPosEquals, panoPovEquals } from 'functions/src/common/pano';
+import { take, takeUntil } from 'rxjs/operators';
+
+const MAP_EVENT_SOURCE = 'map';
 
 @Component({
   selector: 'app-map',
@@ -22,10 +23,10 @@ export class MapComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    combineLatest(
+    combineLatest([
       this.mapService.googleMaps$,
       this.mapService.currentView$
-    ).pipe(
+    ]).pipe(
       take(1),
       takeUntil(this.onDestroy$)
     ).subscribe(([googleMaps, currentView]) => {
@@ -39,16 +40,14 @@ export class MapComponent implements OnInit, OnDestroy {
       this.heading = currentView.pov.heading;
 
       this.map.addListener('idle', () => {
-        this.mapService.setPos(this.map.getCenter());
+        this.mapService.setPos(this.map.getCenter(), MAP_EVENT_SOURCE);
       });
 
-      this.mapService.currentPos$.pipe(
-        distinctUntilChanged(panoPosEquals),
+      this.mapService.getCurrentPos$(MAP_EVENT_SOURCE).pipe(
         takeUntil(this.onDestroy$)
       ).subscribe(currentPos => this.map.setCenter(currentPos));
 
-      this.mapService.currentPov$.pipe(
-        distinctUntilChanged( panoPovEquals ),
+      this.mapService.getCurrentPov$(MAP_EVENT_SOURCE).pipe(
         takeUntil( this.onDestroy$ )
       ).subscribe( currentPov => this.heading = currentPov.heading);
     });

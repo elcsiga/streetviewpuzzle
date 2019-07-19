@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditMenuComponent } from './edit-menu.component';
+import { CheckmarkComponent } from './checkmark.component';
 
-describe('EditMenuComponent', () => {
-  let component: EditMenuComponent;
-  let fixture: ComponentFixture<EditMenuComponent>;
+describe('CheckmarkComponent', () => {
+  let component: CheckmarkComponent;
+  let fixture: ComponentFixture<CheckmarkComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditMenuComponent ]
+      declarations: [ CheckmarkComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditMenuComponent);
+    fixture = TestBed.createComponent(CheckmarkComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

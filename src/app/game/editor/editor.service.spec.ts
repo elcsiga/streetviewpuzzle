@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MainUIStateService } from './main-uistate.service';
+import { EditorService } from './editor.service';
 
-describe('MainUIStateService', () => {
+describe('EditorService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MainUIStateService = TestBed.get(MainUIStateService);
+    const service: EditorService = TestBed.get(EditorService);
     expect(service).toBeTruthy();
   });
 });

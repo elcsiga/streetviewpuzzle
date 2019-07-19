@@ -6,6 +6,7 @@ import { HomeComponent } from './game/home/home.component';
 import { SimplePuzzleDialogComponent } from './game/simple-puzzle-dialog/simple-puzzle-dialog.component';
 import { MapDialogComponent } from './game/map-dialog/map-dialog.component';
 import { PuzzleEditorComponent } from './game/puzzle-editor/puzzle-editor.component';
+import { PuzzleSaveDialogComponent } from './game/puzzle-save-dialog/puzzle-save-dialog.component';
 
 const routes: Routes = [
   {
@@ -19,20 +20,29 @@ const routes: Routes = [
     data: { animation: 'register' }
   },
   {
-    path: 'add-simple-puzzle',
-    component: SimplePuzzleDialogComponent,
-    data: { animation: 'add-simple-puzzle' }
-  },
-  {
-    path: 'map',
-    component: MapDialogComponent,
-    data: { animation: 'map' }
-  },
-  {
     path: 'editor',
     component: PuzzleEditorComponent,
-    data: { animation: 'editor' }
+    data: { animation: 'editor' },
+    children: [
+      {
+        path: 'map',
+        component: MapDialogComponent,
+        data: { animation: 'map' }
+      },
+      {
+        path: 'qa',
+        component: SimplePuzzleDialogComponent,
+        data: { animation: 'qa' }
+      },
+      {
+        path: 'save',
+        component: PuzzleSaveDialogComponent,
+        data: { animation: 'save' }
+      },
+    ]
   },
+
+
   { path: '**', component: HomeComponent }
 ];
 

@@ -8,7 +8,7 @@ import { AuthService } from '../auth-service/auth.service';
 })
 export class UserMenuComponent implements OnInit {
   user$ = this.authService.user$;
-  
+
   constructor(
     private authService: AuthService
   ) { }

@@ -1,3 +1,23 @@
 .puzzle-list {
-    margin: 150px 30px 30px 30px;
+  margin: 150px 30px 30px 30px;
+}
+
+.bottom-right {   
+  z-index: 2;
+  position: fixed;
+  bottom: 1.5em;
+  right: 1.5em;
+
+  button {
+      pointer-events: all;
+  }
+}
+
+.background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: white, $alpha: .5);
+
+  pointer-events: all;
 }

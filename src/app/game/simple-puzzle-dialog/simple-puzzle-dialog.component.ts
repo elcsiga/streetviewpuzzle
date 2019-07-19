@@ -1,59 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import * as firebase from "firebase/app";
-import { AuthService } from 'src/app/auth/auth-service/auth.service';
-import { MapService } from 'src/app/map/map.service';
 import { SimplePuzzle } from 'functions/src/common/puzzle';
+import { EditorService } from '../editor/editor.service';
+import { Location } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-simple-puzzle-dialog',
   templateUrl: './simple-puzzle-dialog.component.html',
   styleUrls: ['./simple-puzzle-dialog.component.scss']
 })
-export class SimplePuzzleDialogComponent implements OnInit {
-  inProgress = false;
+export class SimplePuzzleDialogComponent implements OnInit, OnDestroy {
+  puzzle: SimplePuzzle = this.editorService.getEditedPuzzle();
+
   puzzleForm = new FormGroup({
-    title: new FormControl(''),
-    question: new FormControl(''),
-    answer: new FormControl('')
+    question: new FormControl(this.puzzle.question),
+    answers: new FormControl(this.puzzle.answers.join('\n'))
   });
 
+  private subscription: Subscription;
+
   constructor(
-    private router: Router,
-    private authService: AuthService,
-    private mapService: MapService
+    private location: Location,
+    private editorService: EditorService
   ) { }
 
   ngOnInit() {
+    this.subscription = this.puzzleForm.valueChanges.subscribe(() => {
+      this.puzzle.question = this.puzzleForm.value.question;
+      this.puzzle.answers = this.puzzleForm.value.answers.split('\n').filter(answer => !!answer);
+      this.editorService.setEditedPuzzle(this.puzzle);
+    });
   }
 
-  onSubmit() {
-    this.inProgress = true;
-    this.puzzleForm.value;
-    this.inProgress = false;
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
-    const db = firebase.firestore();
-    const puzzle: SimplePuzzle = {
-      startView: this.mapService.getCurrentViewSnapshot(),
-      title: this.puzzleForm.value.title,
-      question: this.puzzleForm.value.question,
-      answers: [this.puzzleForm.value.answer],
-      author: {
-        uid: this.authService.user$.value.uid,
-        publicUser: null // will be added by the onCreatePuzzle() cloud funtzion
-      },
-      thumbnail: null // wil be added by the onCreatePuzzle() cloud funtzion
-    }
-
-    db.collection("puzzles").add(puzzle)
-      .then( () => {
-        this.router.navigate(['/']);
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error);
-
-        // TODO
-      });
+  close() {
+    this.location.back();
   }
 }

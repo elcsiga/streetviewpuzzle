@@ -5,5 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './map-dialog.component.html',
   styleUrls: ['./map-dialog.component.scss']
 })
-export class MapDialogComponent{
+export class MapDialogComponent {
 }

@@ -8,7 +8,8 @@ import { SimplePuzzle } from 'functions/src/common/puzzle';
 })
 export class PuzzleCardComponent implements OnInit {
 
-  @Input() puzzle: SimplePuzzle
+  @Input() puzzle: SimplePuzzle;
+
   constructor() { }
 
   ngOnInit() {

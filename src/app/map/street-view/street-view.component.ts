@@ -4,6 +4,8 @@ import { combineLatest, Subject } from 'rxjs';
 import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { panoPosEquals, panoPovEquals } from 'functions/src/common/pano';
 
+const STREETVIEW_EVENT_SOURCE = 'streetview';
+
 @Component({
   selector: 'app-street-view',
   templateUrl: './street-view.component.html',
@@ -13,7 +15,6 @@ export class StreetViewComponent implements OnInit, OnDestroy {
 
   private panorama;
 
-  currentPos$ = this.mapService.currentPos$;
   onDestroy$ = new Subject();
 
   constructor(
@@ -21,10 +22,10 @@ export class StreetViewComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    combineLatest(
+    combineLatest([
       this.mapService.googleMaps$,
       this.mapService.currentView$
-    ).pipe(
+    ]).pipe(
       take(1),
       takeUntil(this.onDestroy$)
     ).subscribe(([googleMaps, currentView]) => {
@@ -37,27 +38,26 @@ export class StreetViewComponent implements OnInit, OnDestroy {
         });
 
       this.panorama.addListener('position_changed', () => {
-        this.mapService.setPos(this.panorama.getPosition());
+        this.mapService.setPos(this.panorama.getPosition(), STREETVIEW_EVENT_SOURCE);
       });
 
       this.panorama.addListener('pov_changed', () => {
-        this.mapService.setPov(this.panorama.getPov());
+        this.mapService.setPov(this.panorama.getPov(), STREETVIEW_EVENT_SOURCE);
       });
 
-      this.mapService.currentPos$.pipe(
-        distinctUntilChanged( panoPosEquals ),
-        takeUntil( this.onDestroy$ )
-      ).subscribe( currentPos => this.panorama.setPosition(currentPos));
-      
-      this.mapService.currentPov$.pipe(
-        distinctUntilChanged( panoPovEquals ),
-        takeUntil( this.onDestroy$ )
-      ).subscribe( currentPov => this.panorama.setPov(currentPov));
-      
+      this.mapService.getCurrentPos$(STREETVIEW_EVENT_SOURCE).pipe(
+        takeUntil(this.onDestroy$)
+      ).subscribe(currentPos => {
+        console.log('SETPOS on STREETVIEW', currentPos);
+        this.panorama.setPosition(currentPos);
+      });
+
+      this.mapService.getCurrentPov$(STREETVIEW_EVENT_SOURCE).pipe(
+        takeUntil(this.onDestroy$)
+      ).subscribe(currentPov => this.panorama.setPov(currentPov));
+
     });
 
- 
-    
     // const cafeMarker = new googleMaps.Marker({
     //   position: { lat: 37.869260, lng: -122.254811 },
     //   map: this.panorama,

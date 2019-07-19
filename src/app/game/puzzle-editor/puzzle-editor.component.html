@@ -1,1 +1,26 @@
-<app-edit-menu></app-edit-menu>
+<div class="top-bar"></div>
+<div class="bottom-bar"></div>
+
+<div class="bottons-left">
+    <button routerLink="/editor/map" mat-fab color="default" matTooltip="Show map">
+        <mat-icon>map</mat-icon>
+    </button>
+
+    <button routerLink="/editor/qa" mat-fab color="default" matTooltip="Add puzzle">
+        <mat-icon>question_answer</mat-icon>
+    </button>
+</div>
+
+<div class="bottons-right">
+    <button routerLink="/editor/save" mat-fab color="default" matTooltip="Create puzzle">
+        <mat-icon>done</mat-icon>
+    </button>
+
+    <button routerLink="/" mat-fab color="default" matTooltip="Close editor">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+
+<div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']" class="content">
+    <router-outlet #o="outlet"></router-outlet>
+</div>

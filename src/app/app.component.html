@@ -1,16 +1,5 @@
 <app-street-view></app-street-view>
 
-<div class="logo">
-    Street<br />
-    &nbsp;View<br />
-    &nbsp;&nbsp;Puzzle
-</div>
-
-<ng-container *ngIf="(barColor$ | async) as barColor">
-    <div class="top-bar" [ngClass]="{'bar-light': barColor === 'light','bar-dark': barColor === 'dark' }"></div>
-    <div class="bottom-bar" [ngClass]="{'bar-light': barColor === 'light','bar-dark': barColor === 'dark' }"></div>
-</ng-container>
-
 <div class="top-right">
     <app-user-menu></app-user-menu>
 </div>
@@ -21,4 +10,10 @@
 
 <div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']" class="content">
     <router-outlet #o="outlet"></router-outlet>
+</div>
+
+<div class="logo">
+    Street<br />
+    &nbsp;View<br />
+    &nbsp;&nbsp;Puzzle
 </div>

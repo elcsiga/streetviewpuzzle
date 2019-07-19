@@ -1,22 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MainUIStateService } from 'src/app/main-uistate/main-uistate.service';
+import { Component } from '@angular/core';
+import { routeAnimation } from 'src/app/animations';
 
 @Component({
   selector: 'app-puzzle-editor',
   templateUrl: './puzzle-editor.component.html',
-  styleUrls: ['./puzzle-editor.component.scss']
+  styleUrls: ['./puzzle-editor.component.scss'],
+  animations: [routeAnimation]
 })
-export class PuzzleEditorComponent implements OnInit, OnDestroy {
-
-  constructor(
-    private mainUiState: MainUIStateService
-  ) { }
-
-  ngOnInit() {
-    this.mainUiState.setBarColor('light');
-  }
-  ngOnDestroy() {
-    this.mainUiState.setBarColor('dark');
-  }
-
+export class PuzzleEditorComponent {
 }

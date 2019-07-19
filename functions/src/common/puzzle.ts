@@ -11,5 +11,4 @@ export interface SimplePuzzle {
         uid: string;
         publicUser: PublicUser | null
     } 
-
 }

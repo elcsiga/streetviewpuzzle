@@ -2,9 +2,9 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as https from 'https';
 import { SimplePuzzle } from './common/puzzle';
-import { mapsApiKey } from './common/map';
 import { PublicUser, User } from './common/auth';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
+import { mapsConfig } from './common/app-config-private';
 
 admin.initializeApp();
 
@@ -25,7 +25,7 @@ const updatePuzzle = async (doc: FirebaseFirestore.DocumentSnapshot) => {
         + `&location=${pos.lat},${pos.lng}`
         + `&fov=${fov}`
         + `&heading=${pov.heading}&pitch=${pov.pitch}`
-        + `&key=${mapsApiKey}`;
+        + `&key=${mapsConfig.apiKey}`;
 
     const file = admin.storage().bucket().file(puzzleId);
     await new Promise((resolve, reject) => {

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import loadGoogleMapsApi from 'load-google-maps-api';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, filter, take } from 'rxjs/operators';
-import { PanoView, PanoPos, PanoPov } from 'functions/src/common/pano';
-import { mapsApiKey } from 'functions/src/common/map';
+import { map, filter, take, distinctUntilChanged } from 'rxjs/operators';
+import { PanoView, PanoPos, PanoPov, panoPovEquals, panoPosEquals } from 'functions/src/common/pano';
+import { mapsConfig } from 'functions/src/common/app-config-private';
 
 @Injectable({
   providedIn: 'root'
@@ -11,44 +11,71 @@ import { mapsApiKey } from 'functions/src/common/map';
 export class MapService {
 
   private panorama;
+  private positionSource;
+  private povSource;
+
+  public baseView: PanoView = {
+    position: {
+      lat: 47.49801,
+      lng: 19.03991
+    },
+    pov: {
+      heading: 100,
+      pitch: 0
+    },
+    zoom: 1
+  };
+
   private googleMaps = new BehaviorSubject(null);
   googleMaps$ = this.googleMaps.pipe(
     filter(m => !!m)
   );
 
+  private currentPos = new BehaviorSubject<PanoPos>(this.baseView.position);
+  private currentPov = new BehaviorSubject<PanoPov>(this.baseView.pov);
+
+  currentView$: Observable<PanoView> = combineLatest([
+    this.getCurrentPos$('view'),
+    this.getCurrentPov$('view')
+  ]).pipe(
+    map(([position, pov]) => ({ position, pov, zoom: 1 }))
+  );
+
   constructor() { }
+
+  getCurrentPos$(positionSource: string) {
+    return this.currentPos.pipe(
+      distinctUntilChanged(panoPosEquals),
+      filter(pos => positionSource !== this.positionSource)
+    );
+  }
+
+  getCurrentPov$(povSource: string) {
+    return this.currentPov.pipe(
+      distinctUntilChanged(panoPovEquals),
+      filter(pov => povSource !== this.povSource)
+    );
+  }
 
   init() {
     loadGoogleMapsApi({
-      key: mapsApiKey
+      key: mapsConfig.apiKey
     }).then(googleMaps => {
       console.log('Maps API loaded...');
       this.googleMaps.next(googleMaps);
     }).catch(error => {
       console.error('Maps API loading failed!', error);
-    })
+    });
   }
 
-  private currentPos = new BehaviorSubject<PanoPos>({
-    lat: 47.49801,
-    lng: 19.03991
-  });
-  currentPos$ = this.currentPos.asObservable();
-  setPos(pos: any) { this.currentPos.next({ lat: pos.lat(), lng: pos.lng() }) };
-
-  private currentPov = new BehaviorSubject<PanoPov>({
-    heading: 100,
-    pitch: 0
-  });
-  currentPov$ = this.currentPov.asObservable();
-  setPov(pov: any) { this.currentPov.next({ heading: pov.heading, pitch: pov.pitch }) };
-
-  currentView$: Observable<PanoView> = combineLatest(
-    this.currentPos$,
-    this.currentPov$
-  ).pipe(
-    map(([position, pov]) => ({ position, pov, zoom: 1 }))
-  );
+  setPos(pos: any, positionSource: string) {
+    this.positionSource = positionSource;
+    this.currentPos.next({ lat: pos.lat(), lng: pos.lng() });
+  }
+  setPov(pov: any, povSource: string) {
+    this.povSource = povSource;
+    this.currentPov.next({ heading: pov.heading, pitch: pov.pitch });
+  }
 
   getCurrentViewSnapshot(): PanoView {
     let view: PanoView;

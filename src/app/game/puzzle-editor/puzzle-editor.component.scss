@@ -1,0 +1,53 @@
+.bottons-right,
+.bottons-left {
+  z-index: 2;
+  position: fixed;
+  bottom: 1.5em;
+
+  button {
+    pointer-events: all;
+  }
+}
+.bottons-right {
+  right: 1.5em;
+
+  button {
+    margin-left: 0.5rem;
+  }
+}
+.bottons-left {
+  left: 1.5em;
+
+  button {
+    margin-right: 0.5rem;
+  }
+}
+
+.content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  height: 100%;
+  width: 100%;
+}
+
+.top-bar,
+.bottom-bar {
+  z-index: 1;
+  position: fixed;
+  right: 0;
+  left: 0;
+  height: 100px;
+
+  pointer-events: none;
+  user-select: none;
+}
+.top-bar {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(0, 0, 0, 0));
+}
+.bottom-bar {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(0, 0, 0, 0));
+}
