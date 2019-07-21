@@ -8,6 +8,7 @@ import { MapModule } from './map/map.module';
 import { AuthModule } from './auth/auth.module';
 import { GameModule } from './game/game.module';
 import { MaterialModule } from './material/material.module';
+import { EditModule } from './edit/edit.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { MaterialModule } from './material/material.module';
     MapModule,
     AuthModule,
     MaterialModule,
-    GameModule
+    GameModule,
+    EditModule
   ],
   providers: [],
   bootstrap: [AppComponent]

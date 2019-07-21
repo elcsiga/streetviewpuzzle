@@ -3,24 +3,17 @@ import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home/home.component';
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
-import { SimplePuzzleDialogComponent } from './simple-puzzle-dialog/simple-puzzle-dialog.component';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MapDialogComponent } from './map-dialog/map-dialog.component';
 import { MapModule } from '../map/map.module';
 import { PuzzleCardComponent } from './puzzle-card/puzzle-card.component';
-import { PuzzleEditorComponent } from './puzzle-editor/puzzle-editor.component';
-import { PuzzleSaveDialogComponent } from './puzzle-save-dialog/puzzle-save-dialog.component';
 import { PlayComponent } from './play/play.component';
+import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
   declarations: [
     HomeComponent,
-    SimplePuzzleDialogComponent,
-    MapDialogComponent,
     PuzzleCardComponent,
-    PuzzleEditorComponent,
-    PuzzleSaveDialogComponent,
     PlayComponent
   ],
   imports: [
@@ -29,14 +22,11 @@ import { PlayComponent } from './play/play.component';
     MaterialModule,
     SharedModule,
     RouterModule,
-    MapModule
+    MapModule,
+    AuthModule
   ],
   exports: [
     HomeComponent,
-    SimplePuzzleDialogComponent,
-    MapDialogComponent,
-    PuzzleEditorComponent,
-    PuzzleSaveDialogComponent,
     PlayComponent
   ]
 })

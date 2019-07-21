@@ -1,7 +1,6 @@
 <div *ngIf="(user$ | async) as user">
     <button class="mat-elevation-z10" mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon *ngIf="!user.photoURL">person</mat-icon>
-        <img *ngIf="user.photoURL" class="avatar" [src]="user.photoURL" [alt]="user.email">
+        <app-avatar [url]="user.photoURL"></app-avatar>
     </button>
     <mat-menu #menu="matMenu">
         <div [style.padding]="'1rem'" class="kit-primary-bg">

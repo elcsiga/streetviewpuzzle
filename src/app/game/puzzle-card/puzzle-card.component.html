@@ -1,7 +1,12 @@
-<div class="puzzle-card">
+<div class="puzzle-card" [routerLink]="'/play/' + puzzleId">
     <img [src]="puzzle.thumbnail" />
     <div class="bar"></div>
     <div class="title">
         <span>{{puzzle.title}}</span>
+    </div>
+    <div class="buttons" *ngIf="isMy()">
+        <button (click)="edit()" mat-mini-fab color="default" matTooltip="Edit">
+            <mat-icon>edit</mat-icon>
+        </button>
     </div>
 </div>

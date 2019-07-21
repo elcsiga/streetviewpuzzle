@@ -1,0 +1,82 @@
+<app-dialog>
+    <mat-progress-bar [style.visibility]="inProgress ? 'visible' : 'hidden'" mode="indeterminate">
+    </mat-progress-bar>
+    <section>
+        <h1>Create Puzzle</h1>
+    </section>
+    <form [formGroup]="puzzleForm" (ngSubmit)="onSubmit()">
+        <section>
+            <div>
+                <mat-form-field class="kit-full-width">
+                    <mat-label>Title</mat-label>
+                    <input type="text" matInput formControlName="title" autocomplete="off">
+                    <mat-hint>This will appear on the thumbnail of the puzzle</mat-hint>
+                </mat-form-field>
+            </div>
+        </section>
+        <section>
+            <div class='details'>
+                <app-checkmark [valid]="checkTitle()"></app-checkmark>
+                <p class="title"> Title</p>
+                <p *ngIf="checkTitle(); else noTitle">{{puzzle.title}}</p>
+                <ng-template #noTitle>
+                    <p>Add title!</p>
+                </ng-template>
+            </div>
+            <div class='details'>
+                <app-checkmark [valid]="checkPosition()"></app-checkmark>
+                <p class="title">Starting view</p>
+                <p *ngIf="checkPosition(); else noPosition">{{printPos()}}</p>
+                <ng-template #noPosition>
+                    <p>Use the panoram or the map to set up the starting view!</p>
+                </ng-template>
+            </div>
+            <div class='details'>
+                <app-checkmark [valid]="checkQuestion()"></app-checkmark>
+                <p class="title">Question</p>
+                <p *ngIf="checkQuestion(); else noQuestion">{{puzzle.question}}</p>
+                <ng-template #noQuestion>
+                    <p><a routerLink="/editor/qa"> Ask a question! </a></p>
+                </ng-template>
+            </div>
+            <div class='details'>
+                <app-checkmark [valid]="checkAnswers()"></app-checkmark>
+                <p class="title">Answers</p>
+                <ng-container *ngIf="checkAnswers(); else noAnswers">
+                    <p *ngFor="let answer of puzzle.answers">
+                        {{answer}}
+                    </p>
+                </ng-container>
+                <ng-template #noAnswers>
+                    <p><a routerLink="/editor/qa"> Provide at least one answer! </a></p>
+                </ng-template>
+            </div>
+            <div class='details'>
+                <app-checkmark [valid]="checkAuthor()"></app-checkmark>
+                <p class="title"> Author</p>
+                <p *ngIf="checkAuthor(); else notLoggedIn">
+                    <ng-container *ngIf="currentUser$ | async as user">
+                        <!--<app-avatar [url]="user.photoURL"></app-avatar>-->
+                        {{ user.displayName || user.email}}
+                    </ng-container>
+                </p>
+                <ng-template #notLoggedIn>
+                    <p>
+                        <a routerLink="/signin"> Sign In </a>
+                    </p>
+                </ng-template>
+            </div>
+        </section>
+        <section>
+            <div class="kit-button-row">
+                <span class="kit-separator"></span>
+                <button mat-button type="button" (click)='close()'>
+                    Close
+                </button>
+                <button mat-flat-button type="submit" [disabled]="inProgress || !checkAll()" color="primary">
+                    Create puzzle
+                </button>
+            </div>
+        </section>
+    </form>
+</app-dialog>

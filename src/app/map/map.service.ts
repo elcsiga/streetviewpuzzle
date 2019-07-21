@@ -72,9 +72,17 @@ export class MapService {
     this.positionSource = positionSource;
     this.currentPos.next({ lat: pos.lat(), lng: pos.lng() });
   }
+
   setPov(pov: any, povSource: string) {
     this.povSource = povSource;
     this.currentPov.next({ heading: pov.heading, pitch: pov.pitch });
+  }
+
+  setView(view: PanoView, viewSource: string) {
+    this.povSource = viewSource;
+    this.positionSource = viewSource;
+    this.currentPos.next(view.position);
+    this.currentPov.next(view.pov);
   }
 
   getCurrentViewSnapshot(): PanoView {
