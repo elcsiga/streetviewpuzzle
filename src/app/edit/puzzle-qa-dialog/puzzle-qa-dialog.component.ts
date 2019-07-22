@@ -6,11 +6,11 @@ import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-simple-puzzle-dialog',
-  templateUrl: './simple-puzzle-dialog.component.html',
-  styleUrls: ['./simple-puzzle-dialog.component.scss']
+  selector: 'app-puzzle-qa-dialog',
+  templateUrl: './puzzle-qa-dialog.component.html',
+  styleUrls: ['./puzzle-qa-dialog.component.scss']
 })
-export class SimplePuzzleDialogComponent implements OnInit, OnDestroy {
+export class PuzzleQADialogComponent implements OnInit, OnDestroy {
   puzzle: SimplePuzzle = this.editorService.getEditedPuzzle();
 
   puzzleForm = new FormGroup({

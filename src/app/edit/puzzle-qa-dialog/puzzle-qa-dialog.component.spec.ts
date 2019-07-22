@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SimplePuzzleDialogComponent } from './simple-puzzle-dialog.component';
+import { PuzzleQADialogComponent } from './puzzle-qa-dialog.component';
 
 describe('SimplePuzzleDialogComponent', () => {
-  let component: SimplePuzzleDialogComponent;
-  let fixture: ComponentFixture<SimplePuzzleDialogComponent>;
+  let component: PuzzleQADialogComponent;
+  let fixture: ComponentFixture<PuzzleQADialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SimplePuzzleDialogComponent ]
+      declarations: [ PuzzleQADialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SimplePuzzleDialogComponent);
+    fixture = TestBed.createComponent(PuzzleQADialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

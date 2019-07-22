@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SimplePuzzleDialogComponent } from './simple-puzzle-dialog/simple-puzzle-dialog.component';
+import { PuzzleQADialogComponent } from './puzzle-qa-dialog/puzzle-qa-dialog.component';
 import { MapDialogComponent } from './map-dialog/map-dialog.component';
 import { PuzzleSaveDialogComponent } from './puzzle-save-dialog/puzzle-save-dialog.component';
 import { PuzzleEditorComponent } from './puzzle-editor/puzzle-editor.component';
@@ -13,7 +13,7 @@ import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
   declarations: [
-    SimplePuzzleDialogComponent,
+    PuzzleQADialogComponent,
     MapDialogComponent,
     PuzzleEditorComponent,
     PuzzleSaveDialogComponent,
@@ -28,7 +28,7 @@ import { AuthModule } from '../auth/auth.module';
     AuthModule
   ],
   exports: [
-    SimplePuzzleDialogComponent,
+    PuzzleQADialogComponent,
     MapDialogComponent,
     PuzzleEditorComponent,
     PuzzleSaveDialogComponent
