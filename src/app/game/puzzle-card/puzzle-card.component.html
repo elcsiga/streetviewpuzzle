@@ -5,7 +5,7 @@
         <span>{{puzzle.details.title}}</span>
     </div>
     <div class="buttons" *ngIf="isMy()">
-        <button [routerLink]="'/edit/' + puzzle.id" mat-mini-fab color="default" matTooltip="Edit">
+        <button (click)="edit($event)" mat-mini-fab color="default" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
         </button>
     </div>

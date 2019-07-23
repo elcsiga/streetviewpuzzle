@@ -7,7 +7,7 @@ import { PuzzleQADialogComponent } from './edit/puzzle-qa-dialog/puzzle-qa-dialo
 import { MapDialogComponent } from './edit/map-dialog/map-dialog.component';
 import { PuzzleEditorComponent } from './edit/puzzle-editor/puzzle-editor.component';
 import { PuzzleSaveDialogComponent } from './edit/puzzle-save-dialog/puzzle-save-dialog.component';
-import { ResolverService as PuzzleResolver } from './shared/puzzle-resolver/resolver.service';
+import { PuzzleResolver } from './shared/puzzle-resolver/puzzle-resolver.service';
 
 const editorChildren = [
   {
@@ -41,7 +41,7 @@ const routes: Routes = [
   {
     path: 'edit/:puzzleId',
     component: PuzzleEditorComponent,
-    resolve: { message: PuzzleResolver },
+    resolve: { puzzle: PuzzleResolver },
     data: { animation: 'editor' },
     children: editorChildren
   },

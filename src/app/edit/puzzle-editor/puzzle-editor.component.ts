@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routeAnimation } from 'src/app/animations';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { EditorService } from '../editor/editor.service';
 
 @Component({
   selector: 'app-puzzle-editor',
@@ -11,12 +12,20 @@ import { ActivatedRoute } from '@angular/router';
 export class PuzzleEditorComponent implements OnInit {
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private editorService: EditorService
   ) {
-    //this.activatedRoute.params.subscribe( p => console.log(p));
   }
 
   ngOnInit() {
-    console.log( this.activatedRoute.snapshot.routeConfig.data );
+    const puzzle = (this.activatedRoute.snapshot.data as any).puzzle;
+
+    if (puzzle) {
+      this.editorService.loadPuzzleToEdit(puzzle);
+
+    }
+
+   
+
   }
 }

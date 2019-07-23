@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SimplePuzzleDetails } from 'functions/src/common/puzzle';
+import { SimplePuzzleDetails, Puzzle } from 'functions/src/common/puzzle';
 import { MapService } from 'src/app/map/map.service';
 import { AuthService } from 'src/app/auth/auth-service/auth.service';
 
@@ -35,17 +35,17 @@ export class EditorService {
     }
   }
 
-  loadPuzzleToEdit(puzzle: SimplePuzzleDetails, puzzleId: string) {
+  loadPuzzleToEdit(puzzle: Puzzle) {
     const currentId = localStorage.getItem('puzzle-edited-id');
-    if (puzzleId !== currentId) {
-      this.setEditedPuzzle(puzzle);
-      this.mapService.setView(puzzle.startView, 'edit');
-      localStorage.setItem('puzzle-edited-id', puzzleId);
-    }
+    // if (puzzle.id !== currentId) {
+      this.setEditedPuzzle(puzzle.details);
+      this.mapService.setView(puzzle.details.startView, 'edit');
+      localStorage.setItem('puzzle-edited-id', puzzle.id);
+    // }
   }
 
   setEditedPuzzle(puzzle: SimplePuzzleDetails) {
-    localStorage.setItem('puzzle-edited', JSON.stringify(puzzle));
+    localStorage.setItem('puzzle-edited-', JSON.stringify(puzzle));
   }
 
   clearEditedPuzzle() {

@@ -26,4 +26,9 @@ export class PuzzleCardComponent implements OnInit {
     const uid = this.authService.getUid();
     return uid && this.puzzle.details.author.uid === uid;
   }
+
+  edit( $event: MouseEvent ) {
+    $event.stopPropagation();
+    this.router.navigate(['edit', this.puzzle.id]);
+  }
 }
