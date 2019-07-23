@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { SimplePuzzle } from 'functions/src/common/puzzle';
+import { SimplePuzzleDetails } from 'functions/src/common/puzzle';
 import { EditorService } from '../editor/editor.service';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./puzzle-qa-dialog.component.scss']
 })
 export class PuzzleQADialogComponent implements OnInit, OnDestroy {
-  puzzle: SimplePuzzle = this.editorService.getEditedPuzzle();
+  puzzle: SimplePuzzleDetails = this.editorService.getEditedPuzzle();
 
   puzzleForm = new FormGroup({
     question: new FormControl(this.puzzle.question),

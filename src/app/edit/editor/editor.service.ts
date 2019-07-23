@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SimplePuzzle } from 'functions/src/common/puzzle';
+import { SimplePuzzleDetails } from 'functions/src/common/puzzle';
 import { MapService } from 'src/app/map/map.service';
 import { AuthService } from 'src/app/auth/auth-service/auth.service';
 
@@ -16,10 +16,10 @@ export class EditorService {
   getEditedPuzzleId(): string {
     return localStorage.getItem('puzzle-edited-id');
   }
-  getEditedPuzzle(): SimplePuzzle {
+  getEditedPuzzle(): SimplePuzzleDetails {
     const item = localStorage.getItem('puzzle-edited');
     if (item) {
-      return JSON.parse(item) as SimplePuzzle;
+      return JSON.parse(item) as SimplePuzzleDetails;
     } else {
       return {
         startView: this.mapService.getCurrentViewSnapshot(),
@@ -35,7 +35,7 @@ export class EditorService {
     }
   }
 
-  loadPuzzleToEdit(puzzle: SimplePuzzle, puzzleId: string) {
+  loadPuzzleToEdit(puzzle: SimplePuzzleDetails, puzzleId: string) {
     const currentId = localStorage.getItem('puzzle-edited-id');
     if (puzzleId !== currentId) {
       this.setEditedPuzzle(puzzle);
@@ -44,7 +44,7 @@ export class EditorService {
     }
   }
 
-  setEditedPuzzle(puzzle: SimplePuzzle) {
+  setEditedPuzzle(puzzle: SimplePuzzleDetails) {
     localStorage.setItem('puzzle-edited', JSON.stringify(puzzle));
   }
 

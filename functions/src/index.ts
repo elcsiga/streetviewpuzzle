@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as https from 'https';
-import { SimplePuzzle } from './common/puzzle';
+import { SimplePuzzleDetails } from './common/puzzle';
 import { PublicUser, User } from './common/auth';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { mapsConfig } from './common/app-config-private';
@@ -9,7 +9,7 @@ import { mapsConfig } from './common/app-config-private';
 admin.initializeApp();
 
 const updatePuzzle = async (doc: FirebaseFirestore.DocumentSnapshot) => {
-    const puzzle = doc.data() as SimplePuzzle;
+    const puzzle = doc.data() as SimplePuzzleDetails;
     const puzzleId = doc.id;
 
     console.log('Creating thumbnail for ', puzzleId);

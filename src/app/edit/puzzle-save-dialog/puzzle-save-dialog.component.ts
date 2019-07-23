@@ -3,7 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase/app';
 import { MapService } from 'src/app/map/map.service';
-import { SimplePuzzle } from 'functions/src/common/puzzle';
+import { SimplePuzzleDetails } from 'functions/src/common/puzzle';
 import { EditorService } from '../editor/editor.service';
 import { Subscription, Observable } from 'rxjs';
 import { Location } from '@angular/common';
@@ -19,7 +19,7 @@ import { map } from 'rxjs/operators';
 })
 export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
 
-  puzzle: SimplePuzzle = this.editorService.getEditedPuzzle();
+  puzzle: SimplePuzzleDetails = this.editorService.getEditedPuzzle();
 
   inProgress = false;
   puzzleForm = new FormGroup({

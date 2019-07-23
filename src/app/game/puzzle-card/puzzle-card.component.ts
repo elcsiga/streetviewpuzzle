@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SimplePuzzle } from 'functions/src/common/puzzle';
+import { SimplePuzzleDetails, Puzzle } from 'functions/src/common/puzzle';
 import { AuthService } from 'src/app/auth/auth-service/auth.service';
 import { Router } from '@angular/router';
 import { EditorService } from 'src/app/edit/editor/editor.service';
@@ -11,8 +11,7 @@ import { EditorService } from 'src/app/edit/editor/editor.service';
 })
 export class PuzzleCardComponent implements OnInit {
 
-  @Input() puzzle: SimplePuzzle;
-  @Input() puzzleId: string;
+  @Input() puzzle: Puzzle;
 
   constructor(
     private authService: AuthService,
@@ -25,11 +24,6 @@ export class PuzzleCardComponent implements OnInit {
 
   isMy(): boolean {
     const uid = this.authService.getUid();
-    return uid && this.puzzle.author.uid === uid;
-  }
-
-  edit() {
-    this.editorService.loadPuzzleToEdit(this.puzzle, this.puzzleId);
-    this.router.navigate(['/', 'editor']);
+    return uid && this.puzzle.details.author.uid === uid;
   }
 }

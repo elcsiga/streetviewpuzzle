@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SimplePuzzle } from 'functions/src/common/puzzle';
+import { SimplePuzzleDetails, Puzzle } from 'functions/src/common/puzzle';
 import * as firebase from 'firebase/app';
 import { MapService } from 'src/app/map/map.service';
 
@@ -10,7 +10,7 @@ import { MapService } from 'src/app/map/map.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  puzzles: SimplePuzzle[];
+  puzzles: Puzzle[];
   private startTime;
 
   constructor(
@@ -20,7 +20,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     firebase.firestore().collection('puzzles').onSnapshot(snapshot => {
       const puzzles = [];
-      snapshot.forEach(p => puzzles.push(p.data()));
+      snapshot.forEach(p => puzzles.push({
+        id: p.id,
+        details: p.data() as SimplePuzzleDetails
+      }));
       this.puzzles = puzzles;
     });
 

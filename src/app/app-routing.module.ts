@@ -7,6 +7,25 @@ import { PuzzleQADialogComponent } from './edit/puzzle-qa-dialog/puzzle-qa-dialo
 import { MapDialogComponent } from './edit/map-dialog/map-dialog.component';
 import { PuzzleEditorComponent } from './edit/puzzle-editor/puzzle-editor.component';
 import { PuzzleSaveDialogComponent } from './edit/puzzle-save-dialog/puzzle-save-dialog.component';
+import { ResolverService as PuzzleResolver } from './shared/puzzle-resolver/resolver.service';
+
+const editorChildren = [
+  {
+    path: 'map',
+    component: MapDialogComponent,
+    data: { animation: 'map' }
+  },
+  {
+    path: 'qa',
+    component: PuzzleQADialogComponent,
+    data: { animation: 'qa' }
+  },
+  {
+    path: 'save',
+    component: PuzzleSaveDialogComponent,
+    data: { animation: 'save' }
+  }
+];
 
 const routes: Routes = [
   {
@@ -20,26 +39,17 @@ const routes: Routes = [
     data: { animation: 'register' }
   },
   {
-    path: 'editor',
+    path: 'edit/:puzzleId',
+    component: PuzzleEditorComponent,
+    resolve: { message: PuzzleResolver },
+    data: { animation: 'editor' },
+    children: editorChildren
+  },
+  {
+    path: 'create/:puzzleType',
     component: PuzzleEditorComponent,
     data: { animation: 'editor' },
-    children: [
-      {
-        path: 'map',
-        component: MapDialogComponent,
-        data: { animation: 'map' }
-      },
-      {
-        path: 'qa',
-        component: PuzzleQADialogComponent,
-        data: { animation: 'qa' }
-      },
-      {
-        path: 'save',
-        component: PuzzleSaveDialogComponent,
-        data: { animation: 'save' }
-      },
-    ]
+    children: editorChildren
   },
 
 

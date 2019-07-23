@@ -1,11 +1,11 @@
-<div class="puzzle-card" [routerLink]="'/play/' + puzzleId">
-    <img [src]="puzzle.thumbnail" />
+<div class="puzzle-card" [routerLink]="'/play/' + puzzle.id">
+    <img [src]="puzzle.details.thumbnail" />
     <div class="bar"></div>
     <div class="title">
-        <span>{{puzzle.title}}</span>
+        <span>{{puzzle.details.title}}</span>
     </div>
     <div class="buttons" *ngIf="isMy()">
-        <button (click)="edit()" mat-mini-fab color="default" matTooltip="Edit">
+        <button [routerLink]="'/edit/' + puzzle.id" mat-mini-fab color="default" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
         </button>
     </div>

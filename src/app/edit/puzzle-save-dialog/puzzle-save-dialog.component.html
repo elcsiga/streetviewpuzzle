@@ -36,7 +36,7 @@
                 <p class="title">Question</p>
                 <p *ngIf="checkQuestion(); else noQuestion">{{puzzle.question}}</p>
                 <ng-template #noQuestion>
-                    <p><a routerLink="/editor/qa"> Ask a question! </a></p>
+                    <p><a routerLink="qa"> Ask a question! </a></p>
                 </ng-template>
             </div>
             <div class='details'>
@@ -48,7 +48,7 @@
                     </p>
                 </ng-container>
                 <ng-template #noAnswers>
-                    <p><a routerLink="/editor/qa"> Provide at least one answer! </a></p>
+                    <p><a routerLink="qa"> Provide at least one answer! </a></p>
                 </ng-template>
             </div>
             <div class='details'>
