@@ -89,7 +89,7 @@ export class MapService {
 
   getCurrentViewSnapshot(): PanoView {
     let view: PanoView;
-    this.currentView$.pipe(take(1)).subscribe(w => view = w);
+    this.getCurrentView$('snapshot').pipe(take(1)).subscribe(w => view = w);
     return view;
   }
 }

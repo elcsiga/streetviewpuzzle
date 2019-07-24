@@ -24,7 +24,7 @@ export class StreetViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     combineLatest([
       this.mapService.googleMaps$,
-      this.mapService.currentView$
+      this.mapService.getCurrentView$('snapshot')
     ]).pipe(
       take(1),
       takeUntil(this.onDestroy$)
@@ -54,7 +54,10 @@ export class StreetViewComponent implements OnInit, OnDestroy {
 
       this.mapService.getCurrentPov$(STREETVIEW_EVENT_SOURCE).pipe(
         takeUntil(this.onDestroy$)
-      ).subscribe(currentPov => this.panorama.setPov(currentPov));
+      ).subscribe(currentPov => {
+        console.log('SETPOV on STREETVIEW', currentPov);
+        this.panorama.setPov(currentPov);
+      });
 
     });
 

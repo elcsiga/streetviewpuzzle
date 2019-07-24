@@ -3,6 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { SimplePuzzleDetails, Puzzle } from 'functions/src/common/puzzle';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { EditedPuzzleService } from '../edited-puzzle.service';
 
 
 @Component({
@@ -12,26 +13,29 @@ import { Subscription } from 'rxjs';
 })
 export class PuzzleQADialogComponent implements OnInit, OnDestroy {
 
-  @Input() puzzleDetails: SimplePuzzleDetails;
-  @Output() puzzleDetailsChange = new EventEmitter<SimplePuzzleDetails>();
-
   puzzleForm = new FormGroup({
-    question: new FormControl(this.puzzleDetails.question),
-    answers: new FormControl(this.puzzleDetails.answers.join('\n'))
+    question: new FormControl(this.getPuzzleDetailsSnapshot().question),
+    answers: new FormControl(this.getPuzzleDetailsSnapshot().answers.join('\n'))
   });
 
   private subscription: Subscription;
 
   constructor(
     private location: Location,
-    //private editorService: EditorService
+    private editedPuzzleService: EditedPuzzleService
   ) { }
+
+  getPuzzleDetailsSnapshot(): SimplePuzzleDetails {
+    return this.editedPuzzleService.getPuzzleSnapshot().details;
+  }
 
   ngOnInit() {
     this.subscription = this.puzzleForm.valueChanges.subscribe(() => {
-      this.puzzleDetails.question = this.puzzleForm.value.question;
-      this.puzzleDetails.answers = this.puzzleForm.value.answers.split('\n').filter(answer => !!answer);
-      this.puzzleDetailsChange.emit(this.puzzleDetails);
+      this.editedPuzzleService.setDetails({
+        ...this.getPuzzleDetailsSnapshot(),
+        question: this.puzzleForm.value.question,
+        answers: this.puzzleForm.value.answers.split('\n').filter(answer => !!answer)
+      });
     });
   }
 

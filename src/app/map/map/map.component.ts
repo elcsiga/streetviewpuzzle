@@ -25,7 +25,7 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit() {
     combineLatest([
       this.mapService.googleMaps$,
-      this.mapService.currentView$
+      this.mapService.getCurrentView$('snapshot')
     ]).pipe(
       take(1),
       takeUntil(this.onDestroy$)

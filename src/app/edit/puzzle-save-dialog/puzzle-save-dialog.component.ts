@@ -3,14 +3,12 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase/app';
 import { MapService } from 'src/app/map/map.service';
-import { SimplePuzzleDetails } from 'functions/src/common/puzzle';
-import { EditorService } from '../editor/editor.service';
-import { Subscription, Observable } from 'rxjs';
+import { SimplePuzzleDetails, Puzzle } from 'functions/src/common/puzzle';
+import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { panoPosEquals, printPanoPos } from 'functions/src/common/pano';
 import { AuthService } from 'src/app/auth/auth-service/auth.service';
-import { PublicUser } from 'functions/src/common/auth';
-import { map } from 'rxjs/operators';
+import { EditedPuzzleService } from '../edited-puzzle.service';
 
 @Component({
   selector: 'app-puzzle-save-dialog',
@@ -19,11 +17,9 @@ import { map } from 'rxjs/operators';
 })
 export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
 
-  puzzle: SimplePuzzleDetails = this.editorService.getEditedPuzzle();
-
   inProgress = false;
   puzzleForm = new FormGroup({
-    title: new FormControl(this.puzzle.title),
+    title: new FormControl(this.getPuzzleSnapshot().details.title),
   });
 
   private subscription: Subscription;
@@ -34,14 +30,20 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
     private location: Location,
     private router: Router,
     private mapService: MapService,
-    private editorService: EditorService,
+    private editedPuzzleService: EditedPuzzleService,
     private authService: AuthService
   ) { }
 
+  getPuzzleSnapshot(): Puzzle {
+    return this.editedPuzzleService.getPuzzleSnapshot();
+  }
+
   ngOnInit() {
     this.subscription = this.puzzleForm.valueChanges.subscribe(() => {
-      this.puzzle.title = this.puzzleForm.value.title;
-      this.editorService.setEditedPuzzle(this.puzzle);
+      this.editedPuzzleService.setDetails({
+        ...this.getPuzzleSnapshot().details,
+        title: this.puzzleForm.value.title
+      });
     });
   }
 
@@ -50,16 +52,16 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
   }
 
   checkPosition(): boolean {
-    return !panoPosEquals(this.puzzle.startView.position, this.mapService.baseView.position);
+    return !panoPosEquals(this.getPuzzleSnapshot().details.startView.position, this.mapService.baseView.position);
   }
   checkTitle(): boolean {
-    return !!this.puzzle.title;
+    return !!this.getPuzzleSnapshot().details.title;
   }
   checkQuestion(): boolean {
-    return !!this.puzzle.question;
+    return !!this.getPuzzleSnapshot().details.question;
   }
   checkAnswers(): boolean {
-    return this.puzzle.answers.some(answer => !!answer);
+    return this.getPuzzleSnapshot().details.answers.some(answer => !!answer);
   }
   checkAuthor(): boolean {
     return !!this.authService.getUid();
@@ -73,19 +75,17 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
   }
 
   printPos() {
-    return printPanoPos(this.puzzle.startView.position);
+    return printPanoPos(this.getPuzzleSnapshot().details.startView.position);
   }
   onSubmit() {
-    // updating with the latest user and position
-    this.puzzle.startView = this.mapService.getCurrentViewSnapshot();
-    this.puzzle.author.uid = this.authService.getUid();
-    this.editorService.setEditedPuzzle(this.puzzle);
+
+    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
+    puzzle.details.author.uid = this.authService.getUid();
 
     // saving
     this.inProgress = true;
-    firebase.firestore().collection('puzzles').add(this.puzzle)
+    firebase.firestore().collection('puzzles').add(puzzle)
       .then(() => {
-        this.editorService.clearEditedPuzzle();
         this.router.navigate(['/']);
       })
       .catch((error) => {

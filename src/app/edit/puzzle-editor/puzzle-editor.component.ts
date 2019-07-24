@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routeAnimation } from 'src/app/animations';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-// import { EditorService } from '../editor/editor.service';
-// import { MapService } from 'src/app/map/map.service';
-// import { Subscription } from 'rxjs';
 import { Puzzle } from 'functions/src/common/puzzle';
+import { EditedPuzzleService } from '../edited-puzzle.service';
+import { MapService } from 'src/app/map/map.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-puzzle-editor',
@@ -14,35 +14,29 @@ import { Puzzle } from 'functions/src/common/puzzle';
 })
 export class PuzzleEditorComponent implements OnInit, OnDestroy {
 
-  //private subscription: Subscription;
-
-  puzzle: Puzzle;
+  private sub: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    //private editorService: EditorService,
-    //private mapService: MapService
+    private editedPuzzleService: EditedPuzzleService,
+    private mapService: MapService
   ) {
   }
 
   ngOnInit() {
-    const puzzleToEdit = (this.activatedRoute.snapshot.data as any).puzzle;
+    const puzzleToEdit: Puzzle = (this.activatedRoute.snapshot.data as any).puzzle;
 
     if (puzzleToEdit) {
-     // this.editorService.loadPuzzleToEdit(puzzle);
-      this.puzzle = puzzleToEdit;
+      this.editedPuzzleService.setPuzzle(puzzleToEdit);
+      this.mapService.setView(puzzleToEdit.details.startView, 'editor');
+      this.sub = this.mapService.getCurrentView$('editor').subscribe( view => this.editedPuzzleService.setView(view));
     }
-
-    // this.mapService.setView(puzzle.details.startView, 'edit');
-
-    //this.subscription = this.mapService.getCurrentView$('editor').subscribe( view => {
-    //  this.editorService.setEditedPuzzle
-    ///});
   }
 
   ngOnDestroy() {
-   //this.subscription.unsubscribe();
-
-
+    this.editedPuzzleService.setPuzzle(null);
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 }

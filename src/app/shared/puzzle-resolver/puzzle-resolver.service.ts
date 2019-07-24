@@ -19,7 +19,7 @@ export class PuzzleResolver implements Resolve<Observable<Puzzle>> {
         id: snapshot.id,
         details: snapshot.data() as SimplePuzzleDetails
       }))
-    )
+    );
   }
 }
 
