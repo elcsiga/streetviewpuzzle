@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { SimplePuzzleDetails, Puzzle } from 'functions/src/common/puzzle';
-//import { EditorService } from '../editor/editor.service';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -13,12 +12,12 @@ import { Subscription } from 'rxjs';
 })
 export class PuzzleQADialogComponent implements OnInit, OnDestroy {
 
-  @Input() puzzle: Puzzle;
-  @Output() puzzleChange = new EventEmitter<Puzzle>();
+  @Input() puzzleDetails: SimplePuzzleDetails;
+  @Output() puzzleDetailsChange = new EventEmitter<SimplePuzzleDetails>();
 
   puzzleForm = new FormGroup({
-    question: new FormControl(this.puzzle.details.question),
-    answers: new FormControl(this.puzzle.details.answers.join('\n'))
+    question: new FormControl(this.puzzleDetails.question),
+    answers: new FormControl(this.puzzleDetails.answers.join('\n'))
   });
 
   private subscription: Subscription;
@@ -30,9 +29,9 @@ export class PuzzleQADialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.puzzleForm.valueChanges.subscribe(() => {
-      this.puzzle.question = this.puzzleForm.value.question;
-      this.puzzle.answers = this.puzzleForm.value.answers.split('\n').filter(answer => !!answer);
-      this.puzzleChange.emit(this.puzzle);
+      this.puzzleDetails.question = this.puzzleForm.value.question;
+      this.puzzleDetails.answers = this.puzzleForm.value.answers.split('\n').filter(answer => !!answer);
+      this.puzzleDetailsChange.emit(this.puzzleDetails);
     });
   }
 
