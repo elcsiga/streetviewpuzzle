@@ -79,12 +79,9 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
   }
   onSubmit() {
 
-    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
-    puzzle.details.author.uid = this.authService.getUid();
-
     // saving
     this.inProgress = true;
-    firebase.firestore().collection('puzzles').add(puzzle)
+    firebase.firestore().collection('puzzles').add(this.editedPuzzleService.getPuzzleSnapshot())
       .then(() => {
         this.router.navigate(['/']);
       })

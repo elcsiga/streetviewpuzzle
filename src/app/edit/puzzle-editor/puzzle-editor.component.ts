@@ -5,6 +5,7 @@ import { Puzzle } from 'functions/src/common/puzzle';
 import { EditedPuzzleService } from '../edited-puzzle.service';
 import { MapService } from 'src/app/map/map.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth-service/auth.service';
 
 @Component({
   selector: 'app-puzzle-editor',
@@ -19,7 +20,8 @@ export class PuzzleEditorComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private editedPuzzleService: EditedPuzzleService,
-    private mapService: MapService
+    private mapService: MapService,
+    private authService: AuthService
   ) {
   }
 
@@ -27,10 +29,28 @@ export class PuzzleEditorComponent implements OnInit, OnDestroy {
     const puzzleToEdit: Puzzle = (this.activatedRoute.snapshot.data as any).puzzle;
 
     if (puzzleToEdit) {
+      // edit
       this.editedPuzzleService.setPuzzle(puzzleToEdit);
       this.mapService.setView(puzzleToEdit.details.startView, 'editor');
-      this.sub = this.mapService.getCurrentView$('editor').subscribe( view => this.editedPuzzleService.setView(view));
+    } else {
+      // create
+      this.editedPuzzleService.setPuzzle({
+        id: null,
+        details: {
+          startView: this.mapService.getCurrentViewSnapshot(),
+          title: '',
+          question: '',
+          answers:  [],
+          author: {
+            uid: this.authService.getUid(),
+            publicUser: null
+          },
+          thumbnail: null
+        }
+      });
     }
+
+    this.sub = this.mapService.getCurrentView$('editor').subscribe( view => this.editedPuzzleService.setView(view));
   }
 
   ngOnDestroy() {
