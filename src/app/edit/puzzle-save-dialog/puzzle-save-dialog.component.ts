@@ -18,8 +18,10 @@ import { EditedPuzzleService } from '../edited-puzzle.service';
 export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
 
   inProgress = false;
+  puzzle: Puzzle = this.editedPuzzleService.getPuzzleSnapshot();
+
   puzzleForm = new FormGroup({
-    title: new FormControl(this.getPuzzleSnapshot().details.title),
+    title: new FormControl(this.puzzle.details.title),
   });
 
   private subscription: Subscription;
@@ -34,14 +36,10 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
     private authService: AuthService
   ) { }
 
-  getPuzzleSnapshot(): Puzzle {
-    return this.editedPuzzleService.getPuzzleSnapshot();
-  }
-
   ngOnInit() {
     this.subscription = this.puzzleForm.valueChanges.subscribe(() => {
       this.editedPuzzleService.setDetails({
-        ...this.getPuzzleSnapshot().details,
+        ...this.puzzle.details,
         title: this.puzzleForm.value.title
       });
     });
@@ -52,16 +50,16 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
   }
 
   checkPosition(): boolean {
-    return !panoPosEquals(this.getPuzzleSnapshot().details.startView.position, this.mapService.baseView.position);
+    return !panoPosEquals(this.puzzle.details.startView.position, this.mapService.baseView.position);
   }
   checkTitle(): boolean {
-    return !!this.getPuzzleSnapshot().details.title;
+    return !!this.puzzle.details.title;
   }
   checkQuestion(): boolean {
-    return !!this.getPuzzleSnapshot().details.question;
+    return !!this.puzzle.details.question;
   }
   checkAnswers(): boolean {
-    return this.getPuzzleSnapshot().details.answers.some(answer => !!answer);
+    return this.puzzle.details.answers.some(answer => !!answer);
   }
   checkAuthor(): boolean {
     return !!this.authService.getUid();
@@ -75,21 +73,32 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
   }
 
   printPos() {
-    return printPanoPos(this.getPuzzleSnapshot().details.startView.position);
+    return printPanoPos(this.puzzle.details.startView.position);
   }
   onSubmit() {
-
-    // saving
+    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
     this.inProgress = true;
-    firebase.firestore().collection('puzzles').add(this.editedPuzzleService.getPuzzleSnapshot())
-      .then(() => {
+    const collection = firebase.firestore().collection('puzzles');
+
+    if (puzzle.id) {
+      collection.doc(puzzle.id).set(puzzle.details).then(() => {
         this.router.navigate(['/']);
       })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
-        // TODO
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+          // TODO
+        })
+        .finally(() => this.inProgress = false);
+    } else {
+      collection.add(puzzle.details).then(() => {
+        this.router.navigate(['/']);
       })
-      .finally(() => this.inProgress = false);
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+          // TODO
+        })
+        .finally(() => this.inProgress = false);
+    }
   }
 
   close() {

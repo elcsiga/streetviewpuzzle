@@ -1,6 +1,5 @@
 .bottons-right,
 .bottons-left {
-  z-index: 2;
   position: fixed;
   bottom: 1.5em;
 
@@ -27,14 +26,12 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 4;
   height: 100%;
   width: 100%;
 }
 
 .top-bar,
 .bottom-bar {
-  z-index: 1;
   position: fixed;
   right: 0;
   left: 0;

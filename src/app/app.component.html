@@ -1,19 +1,16 @@
 <app-street-view></app-street-view>
 
-<div class="top-right">
-    <app-user-menu></app-user-menu>
+<div class="logo">
+    Street<br />
+    &nbsp;View<br />
+    &nbsp;&nbsp;Puzzle
 </div>
 
-<div class="bottom-right">
-
+<div class="top-right">
+    <app-user-menu></app-user-menu>
 </div>
 
 <div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']" class="content">
     <router-outlet #o="outlet"></router-outlet>
 </div>
 
-<div class="logo">
-    Street<br />
-    &nbsp;View<br />
-    &nbsp;&nbsp;Puzzle
-</div>

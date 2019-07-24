@@ -18,7 +18,7 @@
             <div class='details'>
                 <app-checkmark [valid]="checkTitle()"></app-checkmark>
                 <p class="title"> Title</p>
-                <p *ngIf="checkTitle(); else noTitle">{{puzzle.title}}</p>
+                <p *ngIf="checkTitle(); else noTitle">{{puzzle.details.title}}</p>
                 <ng-template #noTitle>
                     <p>Add title!</p>
                 </ng-template>
@@ -34,7 +34,7 @@
             <div class='details'>
                 <app-checkmark [valid]="checkQuestion()"></app-checkmark>
                 <p class="title">Question</p>
-                <p *ngIf="checkQuestion(); else noQuestion">{{puzzle.question}}</p>
+                <p *ngIf="checkQuestion(); else noQuestion">{{puzzle.details.question}}</p>
                 <ng-template #noQuestion>
                     <p><a routerLink="qa"> Ask a question! </a></p>
                 </ng-template>
@@ -43,7 +43,7 @@
                 <app-checkmark [valid]="checkAnswers()"></app-checkmark>
                 <p class="title">Answers</p>
                 <ng-container *ngIf="checkAnswers(); else noAnswers">
-                    <p *ngFor="let answer of puzzle.answers">
+                    <p *ngFor="let answer of puzzle.details.answers">
                         {{answer}}
                     </p>
                 </ng-container>
@@ -74,7 +74,8 @@
                     Close
                 </button>
                 <button mat-flat-button type="submit" [disabled]="inProgress || !checkAll()" color="primary">
-                    Create puzzle
+                    <span *ngIf="puzzle.id">Save Puzzle</span>
+                    <span *ngIf="!puzzle.id">Create Puzzle</span>
                 </button>
             </div>
         </section>

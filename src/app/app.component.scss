@@ -2,7 +2,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 3;
   height: 100%;
   width: 100%;
   pointer-events: none;
@@ -10,7 +9,6 @@
 }
 
 .logo {
-  z-index: 100;
   position: fixed;
   top: 0;
   left: 0;
@@ -28,15 +26,7 @@
 }
 
 .top-right {
-  z-index: 100;
   position: fixed;
   top: 1.5em;
-  right: 1.5em;
-}
-
-.bottom-right {
-  z-index: 2;
-  position: fixed;
-  bottom: 1.5em;
   right: 1.5em;
 }
