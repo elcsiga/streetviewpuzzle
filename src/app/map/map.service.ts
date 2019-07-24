@@ -34,12 +34,14 @@ export class MapService {
   private currentPos = new BehaviorSubject<PanoPos>(this.baseView.position);
   private currentPov = new BehaviorSubject<PanoPov>(this.baseView.pov);
 
-  currentView$: Observable<PanoView> = combineLatest([
-    this.getCurrentPos$('view'),
-    this.getCurrentPov$('view')
-  ]).pipe(
-    map(([position, pov]) => ({ position, pov, zoom: 1 }))
-  );
+  getCurrentView$(viewSource: string): Observable<PanoView> {
+    return combineLatest([
+      this.getCurrentPos$(viewSource),
+      this.getCurrentPov$(viewSource)
+    ]).pipe(
+      map(([position, pov]) => ({ position, pov, zoom: 1 }))
+    );
+  }
 
   constructor() { }
 

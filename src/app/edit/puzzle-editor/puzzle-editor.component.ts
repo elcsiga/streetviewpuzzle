@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routeAnimation } from 'src/app/animations';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { EditorService } from '../editor/editor.service';
+// import { EditorService } from '../editor/editor.service';
+// import { MapService } from 'src/app/map/map.service';
+// import { Subscription } from 'rxjs';
+import { Puzzle } from 'functions/src/common/puzzle';
 
 @Component({
   selector: 'app-puzzle-editor',
@@ -9,23 +12,37 @@ import { EditorService } from '../editor/editor.service';
   styleUrls: ['./puzzle-editor.component.scss'],
   animations: [routeAnimation]
 })
-export class PuzzleEditorComponent implements OnInit {
+export class PuzzleEditorComponent implements OnInit, OnDestroy {
+
+  //private subscription: Subscription;
+
+  puzzle: Puzzle;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private editorService: EditorService
+    //private editorService: EditorService,
+    //private mapService: MapService
   ) {
   }
 
   ngOnInit() {
-    const puzzle = (this.activatedRoute.snapshot.data as any).puzzle;
+    const puzzleToEdit = (this.activatedRoute.snapshot.data as any).puzzle;
 
-    if (puzzle) {
-      this.editorService.loadPuzzleToEdit(puzzle);
-
+    if (puzzleToEdit) {
+     // this.editorService.loadPuzzleToEdit(puzzle);
+      this.puzzle = puzzleToEdit;
     }
 
-   
+    // this.mapService.setView(puzzle.details.startView, 'edit');
+
+    //this.subscription = this.mapService.getCurrentView$('editor').subscribe( view => {
+    //  this.editorService.setEditedPuzzle
+    ///});
+  }
+
+  ngOnDestroy() {
+   //this.subscription.unsubscribe();
+
 
   }
 }
