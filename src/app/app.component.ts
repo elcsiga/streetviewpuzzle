@@ -13,7 +13,6 @@ import 'firebase/firestore';
   animations: [ routeAnimation ]
 })
 export class AppComponent {
-
   constructor(
     private authService: AuthService,
     private mapService: MapService

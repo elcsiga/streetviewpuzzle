@@ -4,7 +4,7 @@
     <section>
         <h1>Create Puzzle</h1>
     </section>
-    <form [formGroup]="puzzleForm" (ngSubmit)="onSubmit()">
+    <form *ngIf="puzzleForm" [formGroup]="puzzleForm" (ngSubmit)="onSubmit()">
         <section>
             <div>
                 <mat-form-field class="kit-full-width">

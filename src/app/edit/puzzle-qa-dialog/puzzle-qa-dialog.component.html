@@ -2,7 +2,7 @@
     <section>
         <h1>Question and answer</h1>
     </section>
-    <form [formGroup]="puzzleForm">
+    <form *ngIf="puzzleForm" [formGroup]="puzzleForm">
         <section>
             <div>
                 <mat-form-field class="kit-full-width">

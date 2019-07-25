@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { SimplePuzzleDetails, Puzzle } from 'functions/src/common/puzzle';
 import { Location } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { EditedPuzzleService } from '../edited-puzzle.service';
+import { take, takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -13,34 +13,37 @@ import { EditedPuzzleService } from '../edited-puzzle.service';
 })
 export class PuzzleQADialogComponent implements OnInit, OnDestroy {
 
-  puzzleForm = new FormGroup({
-    question: new FormControl(this.getPuzzleDetailsSnapshot().question),
-    answers: new FormControl(this.getPuzzleDetailsSnapshot().answers.join('\n'))
-  });
-
-  private subscription: Subscription;
+  puzzleForm: FormGroup;
+  private componentDestroyed$ = new Subject();
 
   constructor(
     private location: Location,
     private editedPuzzleService: EditedPuzzleService
   ) { }
 
-  getPuzzleDetailsSnapshot(): SimplePuzzleDetails {
-    return this.editedPuzzleService.getPuzzleSnapshot().details;
-  }
-
   ngOnInit() {
-    this.subscription = this.puzzleForm.valueChanges.subscribe(() => {
-      this.editedPuzzleService.setDetails({
-        ...this.getPuzzleDetailsSnapshot(),
-        question: this.puzzleForm.value.question,
-        answers: this.puzzleForm.value.answers.split('\n').filter(answer => !!answer)
+    this.editedPuzzleService.puzzle$.pipe(
+      take(1),
+      takeUntil(this.componentDestroyed$)
+    ).subscribe(puzzle => {
+      this.puzzleForm = new FormGroup({
+        question: new FormControl(puzzle.details.question),
+        answers: new FormControl(puzzle.details.answers.join('\n'))
       });
+    });
+
+    this.puzzleForm.valueChanges.pipe(
+      takeUntil(this.componentDestroyed$)
+    ).subscribe(() => {
+      this.editedPuzzleService.setQA(
+        this.puzzleForm.value.question,
+        this.puzzleForm.value.answers.split('\n').filter(answer => !!answer)
+      );
     });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.componentDestroyed$.next();
   }
 
   close() {

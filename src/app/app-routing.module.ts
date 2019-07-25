@@ -13,16 +13,19 @@ const editorChildren = [
   {
     path: 'map',
     component: MapDialogComponent,
+    outlet: 'dialog',
     data: { animation: 'map' }
   },
   {
     path: 'qa',
     component: PuzzleQADialogComponent,
+    outlet: 'dialog',
     data: { animation: 'qa' }
   },
   {
     path: 'save',
     component: PuzzleSaveDialogComponent,
+    outlet: 'dialog',
     data: { animation: 'save' }
   }
 ];
@@ -31,6 +34,7 @@ const routes: Routes = [
   {
     path: 'signin',
     component: SignInDialogComponent,
+    outlet: 'dialog',
     data: { animation: 'signin' }
   },
   {
@@ -51,8 +55,6 @@ const routes: Routes = [
     data: { animation: 'editor' },
     children: editorChildren
   },
-
-
   { path: '**', component: HomeComponent }
 ];
 

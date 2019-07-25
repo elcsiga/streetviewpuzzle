@@ -1,5 +1,9 @@
 <app-street-view></app-street-view>
 
+<div class="content">
+    <router-outlet></router-outlet>
+</div>
+
 <div class="logo">
     Street<br />
     &nbsp;View<br />
@@ -10,7 +14,6 @@
     <app-user-menu></app-user-menu>
 </div>
 
-<div [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']" class="content">
-    <router-outlet #o="outlet"></router-outlet>
+<div class="content">
+    <router-outlet name="dialog"></router-outlet>
 </div>
-
