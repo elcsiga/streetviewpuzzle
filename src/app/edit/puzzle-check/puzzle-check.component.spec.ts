@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CheckmarkComponent } from './checkmark.component';
+import { PuzzleCheckComponent } from './puzzle-check.component';
 
-describe('CheckmarkComponent', () => {
-  let component: CheckmarkComponent;
-  let fixture: ComponentFixture<CheckmarkComponent>;
+describe('PuzzleCheckComponent', () => {
+  let component: PuzzleCheckComponent;
+  let fixture: ComponentFixture<PuzzleCheckComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CheckmarkComponent ]
+      declarations: [ PuzzleCheckComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CheckmarkComponent);
+    fixture = TestBed.createComponent(PuzzleCheckComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -7,8 +7,21 @@ import { Location } from '@angular/common';
 import { panoPosEquals, printPanoPos } from 'functions/src/common/pano';
 import { AuthService } from 'src/app/auth/auth-service/auth.service';
 import { EditedPuzzleService } from '../edited-puzzle.service';
-import { take, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { take, takeUntil, map } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+import { Puzzle } from 'functions/src/common/puzzle';
+import { ThrowStmt } from '@angular/compiler';
+
+interface CheckedPuzzle {
+  puzzle: Puzzle;
+  checks: {
+    position: boolean;
+    title: boolean;
+    question: boolean;
+    answers: boolean;
+    author: boolean;
+  };
+}
 
 @Component({
   selector: 'app-puzzle-save-dialog',
@@ -19,10 +32,33 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
 
   inProgress = false;
   puzzleForm: FormGroup;
+  puzzle: Puzzle;
 
   private componentDestroyed$ = new Subject();
 
   currentUser$ = this.authService.user$;
+
+  checkedPuzzle$: Observable<CheckedPuzzle> = this.editedPuzzleService.puzzle$.pipe(
+    takeUntil(this.componentDestroyed$),
+    map(puzzle => ({
+      puzzle,
+      checks: {
+        position: !panoPosEquals(
+          puzzle.details.startView.position,
+          this.mapService.baseView.position
+        ),
+        title: !!puzzle.details.title,
+        question: !!puzzle.details.question,
+        answers: puzzle.details.answers.some(answer => !!answer),
+        author: !!this.authService.getUid()
+      }
+    }))
+  );
+
+  isPuzzleValid( checkedPuzzle: CheckedPuzzle): boolean {
+    const { position, title, question, answers, author } = checkedPuzzle.checks;
+    return position && title && question && answers && author;
+  }
 
   constructor(
     private location: Location,
@@ -33,12 +69,11 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.editedPuzzleService.puzzle$.pipe(
+    this.checkedPuzzle$.pipe(
       take(1),
-      takeUntil(this.componentDestroyed$)
-    ).subscribe(puzzle => {
+    ).subscribe(checkedPuzzle => {
       this.puzzleForm = new FormGroup({
-        title: new FormControl(puzzle.details.title),
+        title: new FormControl(checkedPuzzle.puzzle.details.title),
       });
     });
 
@@ -53,53 +88,23 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
     this.componentDestroyed$.next();
   }
 
-  checkPosition(): boolean {
-    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
-    return puzzle && !panoPosEquals(puzzle.details.startView.position, this.mapService.baseView.position);
-  }
-  checkTitle(): boolean {
-    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
-    return puzzle && !!puzzle.details.title;
-  }
-  checkQuestion(): boolean {
-    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
-    return puzzle && !!puzzle.details.question;
-  }
-  checkAnswers(): boolean {
-    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
-    return puzzle && puzzle.details.answers.some(answer => !!answer);
-  }
-  checkAuthor(): boolean {
-    return !!this.authService.getUid();
-  }
-  checkAll(): boolean {
-    return this.checkPosition()
-      && this.checkTitle()
-      && this.checkQuestion()
-      && this.checkAnswers()
-      && this.checkAuthor();
+  getOperationTitle(checkedPuzzle: CheckedPuzzle): string {
+    return checkedPuzzle.puzzle.id ? 'Save Puzzle' : 'Create Puzzle';
   }
 
-  isSaveOperation(): boolean {
-    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
-    return puzzle && !!puzzle.id;
-  }
-  isCreateOperation(): boolean {
-    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
-    return puzzle && !puzzle.id;
+  printPos(checkedPuzzle: CheckedPuzzle ): string {
+    return printPanoPos(checkedPuzzle.puzzle.details.startView.position);
   }
 
-  printPos() {
-    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
-    return puzzle && printPanoPos(puzzle.details.startView.position);
-  }
-  onSubmit() {
-    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
-    if (puzzle) {
+  onSubmit(checkedPuzzle: CheckedPuzzle) {
+    if (checkedPuzzle && this.isPuzzleValid(checkedPuzzle)) {
       this.inProgress = true;
+      const id = checkedPuzzle.puzzle.id;
+      const details = checkedPuzzle.puzzle.details;
       const collection = firebase.firestore().collection('puzzles');
-      if (puzzle.id) {
-        collection.doc(puzzle.id).set(puzzle.details).then(() => {
+
+      if (id) {
+        collection.doc(id).set(details).then(() => {
           this.router.navigate(['/']);
         })
           .catch((error) => {
@@ -108,7 +113,7 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
           })
           .finally(() => this.inProgress = false);
       } else {
-        collection.add(puzzle.details).then(() => {
+        collection.add(details).then(() => {
           this.router.navigate(['/']);
         })
           .catch((error) => {

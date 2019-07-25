@@ -3,15 +3,14 @@ import { CommonModule } from '@angular/common';
 import { DialogComponent } from './dialog/dialog.component';
 import { MaterialModule } from '../material/material.module';
 import { RouterModule } from '@angular/router';
-import { CheckmarkComponent } from './checkmark/checkmark.component';
 
 @NgModule({
-  declarations: [DialogComponent, CheckmarkComponent],
+  declarations: [DialogComponent],
   imports: [
     CommonModule,
     MaterialModule,
     RouterModule
   ],
-  exports: [DialogComponent, CheckmarkComponent]
+  exports: [DialogComponent]
 })
 export class SharedModule { }

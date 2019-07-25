@@ -16,9 +16,6 @@ export class EditedPuzzleService {
     filter( p => !!p)
   );
 
-  getPuzzleSnapshot(): Puzzle {
-    return this.puzzle.value;
-  }
   setPuzzle( puzzle: Puzzle ) {
     this.puzzle.next(puzzle);
   }

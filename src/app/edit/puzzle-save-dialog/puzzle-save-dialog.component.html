@@ -4,7 +4,8 @@
     <section>
         <h1>Create Puzzle</h1>
     </section>
-    <form *ngIf="puzzleForm" [formGroup]="puzzleForm" (ngSubmit)="onSubmit()">
+    <form *ngIf="(checkedPuzzle$ | async) as checkedPuzzle" [formGroup]="puzzleForm"
+        (ngSubmit)="onSubmit(checkedPuzzle)">
         <section>
             <div>
                 <mat-form-field class="kit-full-width">
@@ -15,57 +16,48 @@
             </div>
         </section>
         <section>
-            <div class='details'>
-                <app-checkmark [valid]="checkTitle()"></app-checkmark>
-                <p class="title"> Title</p>
-                <p *ngIf="checkTitle(); else noTitle">{{puzzle.details.title}}</p>
-                <ng-template #noTitle>
-                    <p>Add title!</p>
-                </ng-template>
-            </div>
-            <div class='details'>
-                <app-checkmark [valid]="checkPosition()"></app-checkmark>
-                <p class="title">Starting view</p>
-                <p *ngIf="checkPosition(); else noPosition">{{printPos()}}</p>
-                <ng-template #noPosition>
-                    <p>Use the panoram or the map to set up the starting view!</p>
-                </ng-template>
-            </div>
-            <div class='details'>
-                <app-checkmark [valid]="checkQuestion()"></app-checkmark>
-                <p class="title">Question</p>
-                <p *ngIf="checkQuestion(); else noQuestion">{{puzzle.details.question}}</p>
-                <ng-template #noQuestion>
-                    <p><a [routerLink]="['', { outlets: { dialog: 'qa' } }]"> Ask a question! </a></p>
-                </ng-template>
-            </div>
-            <div class='details'>
-                <app-checkmark [valid]="checkAnswers()"></app-checkmark>
-                <p class="title">Answers</p>
-                <ng-container *ngIf="checkAnswers(); else noAnswers">
-                    <p *ngFor="let answer of puzzle.details.answers">
-                        {{answer}}
-                    </p>
-                </ng-container>
-                <ng-template #noAnswers>
-                    <p><a [routerLink]="['', { outlets: { dialog: 'qa' } }]"> Provide at least one answer! </a></p>
-                </ng-template>
-            </div>
-            <div class='details'>
-                <app-checkmark [valid]="checkAuthor()"></app-checkmark>
-                <p class="title"> Author</p>
-                <p *ngIf="checkAuthor(); else notLoggedIn">
+            <app-puzzle-check title="Title" [valid]="checkedPuzzle.checks.title">
+                <span  valid>{{checkedPuzzle.puzzle.details.title}}</span>  
+                <span  invalid>Add title!</span>  
+            </app-puzzle-check>
+
+            <app-puzzle-check title="Starting view" [valid]="checkedPuzzle.checks.position">
+                <span  valid>{{printPos(checkedPuzzle)}}</span>  
+                <span  invalid>Use the panoram or the map to set up the starting view!</span>  
+            </app-puzzle-check>
+
+            <app-puzzle-check title="Question" [valid]="checkedPuzzle.checks.question">
+                <span  valid>{{checkedPuzzle.puzzle.details.question}}</span>  
+                <span  invalid>
+                    <a [routerLink]="['', { outlets: { dialog: 'qa' } }]">
+                        Ask a question!
+                    </a>
+                </span>  
+            </app-puzzle-check>
+
+            <app-puzzle-check title="Answers" [valid]="checkedPuzzle.checks.answers">
+                <span  valid *ngFor="let answer of checkedPuzzle.puzzle.details.answers">
+                    {{answer}}
+                </span>  
+                <span  invalid>
+                    <a [routerLink]="['', { outlets: { dialog: 'qa' } }]">
+                        Provide at least one answer!
+                    </a>
+                </span>  
+            </app-puzzle-check>
+
+            <app-puzzle-check title="Author" [valid]="checkedPuzzle.checks.author">
+                <span  valid>
                     <ng-container *ngIf="currentUser$ | async as user">
                         <!--<app-avatar [url]="user.photoURL"></app-avatar>-->
                         {{ user.displayName || user.email}}
                     </ng-container>
-                </p>
-                <ng-template #notLoggedIn>
-                    <p>
-                        <a [routerLink]="['', { outlets: { dialog: 'signin' } }]"> Sign In </a>
-                    </p>
-                </ng-template>
-            </div>
+                </span>  
+                <span  invalid>
+                    <a [routerLink]="['', { outlets: { dialog: 'signin' } }]"> Sign In </a>
+                </span>  
+            </app-puzzle-check>
+
         </section>
         <section>
             <div class="kit-button-row">
@@ -73,9 +65,9 @@
                 <button mat-button type="button" (click)='close()'>
                     Close
                 </button>
-                <button mat-flat-button type="submit" [disabled]="inProgress || !checkAll()" color="primary">
-                    <span *ngIf="isSaveOperation()">Save Puzzle</span>
-                    <span *ngIf="isCreateOperation()">Create Puzzle</span>
+                <button [disabled]="inProgress || !isPuzzleValid(checkedPuzzle)"
+                        color="primary" mat-flat-button type="submit">
+                    {{getOperationTitle(checkedPuzzle)}}
                 </button>
             </div>
         </section>

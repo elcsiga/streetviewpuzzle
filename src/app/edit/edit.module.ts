@@ -10,6 +10,7 @@ import { MaterialModule } from '../material/material.module';
 import { RouterModule } from '@angular/router';
 import { MapModule } from '../map/map.module';
 import { AuthModule } from '../auth/auth.module';
+import { PuzzleCheckComponent } from './puzzle-check/puzzle-check.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { AuthModule } from '../auth/auth.module';
     MapDialogComponent,
     PuzzleEditorComponent,
     PuzzleSaveDialogComponent,
+    PuzzleCheckComponent,
   ],
   imports: [
     CommonModule,
