@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { MapModule } from '../map/map.module';
 import { AuthModule } from '../auth/auth.module';
 import { PuzzleCheckComponent } from './puzzle-check/puzzle-check.component';
+import { PuzzleTitleDialogComponent } from './puzzle-title-dialog/puzzle-title-dialog.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { PuzzleCheckComponent } from './puzzle-check/puzzle-check.component';
     PuzzleEditorComponent,
     PuzzleSaveDialogComponent,
     PuzzleCheckComponent,
+    PuzzleTitleDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -33,7 +35,8 @@ import { PuzzleCheckComponent } from './puzzle-check/puzzle-check.component';
     PuzzleQADialogComponent,
     MapDialogComponent,
     PuzzleEditorComponent,
-    PuzzleSaveDialogComponent
+    PuzzleSaveDialogComponent,
+    PuzzleTitleDialogComponent
   ]
 })
 export class EditModule { }

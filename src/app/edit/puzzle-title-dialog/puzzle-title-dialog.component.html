@@ -1,0 +1,25 @@
+<app-dialog>
+    <section>
+        <h1>Title</h1>
+    </section>
+    <form *ngIf="puzzleForm" [formGroup]="puzzleForm">
+        <section>
+            <div>
+                <mat-form-field class="kit-full-width">
+                    <mat-label>Title</mat-label>
+                    <input type="text" matInput formControlName="title" autocomplete="off">
+                    <mat-hint>A short text that will appear on puzzle cards.</mat-hint>
+                </mat-form-field>
+            </div>
+        </section>
+
+         <section>
+            <div class="kit-button-row">
+                <span class="kit-separator"></span>
+                <button mat-button type="button" (click)='close()'>
+                    Close
+                </button>
+            </div>
+        </section>        
+    </form>
+</app-dialog>

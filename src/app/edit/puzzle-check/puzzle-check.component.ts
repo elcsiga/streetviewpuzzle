@@ -10,6 +10,7 @@ import { Puzzle } from 'functions/src/common/puzzle';
 export class PuzzleCheckComponent implements OnInit {
 
   @Input() valid: boolean;
+  @Input() changed: boolean;
   @Input() title: string;
 
   constructor(

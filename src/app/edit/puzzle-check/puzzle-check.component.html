@@ -1,17 +1,17 @@
-<div *ngIf="valid === true" class='details'>
+<div *ngIf="valid" class='details'>
     <div class="checkmark">
-        <mat-icon style="color: green;">check_circle</mat-icon>
+        <mat-icon class="green" [ngClass]="{'grey': !changed}">check_circle</mat-icon>
     </div>
-    <p class="title">{{title}}</p>
-    <p class="desc">
+    <p class="title" [ngClass]="{'grey': !changed}">{{title}}</p>
+    <p class="desc" [ngClass]="{'grey': !changed}">
         <ng-content select="[valid]"></ng-content>
     </p>
 </div>
 <div *ngIf="valid === false" class='details'>
     <div class="checkmark">
-        <mat-icon *ngIf="!valid" style="color: red;">report_problem</mat-icon>
+        <mat-icon *ngIf="!valid" class="red">report_problem</mat-icon>
     </div>
-    <p class="title">{{title}}</p>
+    <p class="title">{{title}}     {{ changed ? '+' : '-'}}</p>
     <p class="desc">
         <ng-content select="[invalid]"></ng-content>
     </p>

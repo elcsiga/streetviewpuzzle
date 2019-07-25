@@ -4,6 +4,7 @@ import { SignInDialogComponent } from './auth/signin-dialog/signin-dialog.compon
 import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
 import { HomeComponent } from './game/home/home.component';
 import { PuzzleQADialogComponent } from './edit/puzzle-qa-dialog/puzzle-qa-dialog.component';
+import { PuzzleTitleDialogComponent } from './edit/puzzle-title-dialog/puzzle-title-dialog.component';
 import { MapDialogComponent } from './edit/map-dialog/map-dialog.component';
 import { PuzzleEditorComponent } from './edit/puzzle-editor/puzzle-editor.component';
 import { PuzzleSaveDialogComponent } from './edit/puzzle-save-dialog/puzzle-save-dialog.component';
@@ -37,12 +38,6 @@ const routes: Routes = [
     data: { animation: 'register' }
   },
   {
-    path: 'qa',
-    component: PuzzleQADialogComponent,
-    outlet: 'dialog',
-    data: { animation: 'qa' }
-  },
-  {
     path: 'map',
     component: MapDialogComponent,
     outlet: 'dialog',
@@ -53,6 +48,12 @@ const routes: Routes = [
     component: PuzzleQADialogComponent,
     outlet: 'dialog',
     data: { animation: 'qa' }
+  },
+  {
+    path: 'title',
+    component: PuzzleTitleDialogComponent,
+    outlet: 'dialog',
+    data: { animation: 'title' }
   },
   {
     path: 'save',
