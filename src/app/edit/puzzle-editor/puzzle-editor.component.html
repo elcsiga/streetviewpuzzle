@@ -2,17 +2,17 @@
 <div class="bottom-bar"></div>
 
 <div class="bottons-left">
-    <button routerLink="map" mat-fab color="default" matTooltip="Show map">
+    <button [routerLink]="['', { outlets: { dialog: 'map' } }]" mat-fab color="default" matTooltip="Show map">
         <mat-icon>map</mat-icon>
     </button>
 
-    <button routerLink="qa" mat-fab color="default" matTooltip="Add puzzle">
+    <button [routerLink]="['', { outlets: { dialog: 'qa' } }]" mat-fab color="default" matTooltip="Add puzzle">
         <mat-icon>question_answer</mat-icon>
     </button>
 </div>
 
 <div class="bottons-right">
-    <button routerLink="save" mat-fab color="default" matTooltip="Create puzzle">
+    <button [routerLink]="['', { outlets: { dialog: 'save' } }]" mat-fab color="default" matTooltip="Create puzzle">
         <mat-icon>done</mat-icon>
     </button>
 

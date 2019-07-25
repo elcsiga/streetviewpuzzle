@@ -9,7 +9,39 @@ import { PuzzleEditorComponent } from './edit/puzzle-editor/puzzle-editor.compon
 import { PuzzleSaveDialogComponent } from './edit/puzzle-save-dialog/puzzle-save-dialog.component';
 import { PuzzleResolver } from './shared/puzzle-resolver/puzzle-resolver.service';
 
-const editorChildren = [
+const routes: Routes = [
+
+  {
+    path: 'edit/:puzzleId',
+    component: PuzzleEditorComponent,
+    resolve: { puzzle: PuzzleResolver },
+    data: { animation: 'editor' },
+  },
+  {
+    path: 'create/:puzzleType',
+    component: PuzzleEditorComponent,
+    data: { animation: 'editor' },
+  },
+
+  // dialogs
+  {
+    path: 'signin',
+    component: SignInDialogComponent,
+    outlet: 'dialog',
+    data: { animation: 'signin' }
+  },
+  {
+    path: 'register',
+    component: RegisterDialogComponent,
+    outlet: 'dialog',
+    data: { animation: 'register' }
+  },
+  {
+    path: 'qa',
+    component: PuzzleQADialogComponent,
+    outlet: 'dialog',
+    data: { animation: 'qa' }
+  },
   {
     path: 'map',
     component: MapDialogComponent,
@@ -27,34 +59,8 @@ const editorChildren = [
     component: PuzzleSaveDialogComponent,
     outlet: 'dialog',
     data: { animation: 'save' }
-  }
-];
+  },
 
-const routes: Routes = [
-  {
-    path: 'signin',
-    component: SignInDialogComponent,
-    outlet: 'dialog',
-    data: { animation: 'signin' }
-  },
-  {
-    path: 'register',
-    component: RegisterDialogComponent,
-    data: { animation: 'register' }
-  },
-  {
-    path: 'edit/:puzzleId',
-    component: PuzzleEditorComponent,
-    resolve: { puzzle: PuzzleResolver },
-    data: { animation: 'editor' },
-    children: editorChildren
-  },
-  {
-    path: 'create/:puzzleType',
-    component: PuzzleEditorComponent,
-    data: { animation: 'editor' },
-    children: editorChildren
-  },
   { path: '**', component: HomeComponent }
 ];
 

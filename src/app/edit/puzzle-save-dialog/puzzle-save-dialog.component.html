@@ -36,7 +36,7 @@
                 <p class="title">Question</p>
                 <p *ngIf="checkQuestion(); else noQuestion">{{puzzle.details.question}}</p>
                 <ng-template #noQuestion>
-                    <p><a routerLink="qa"> Ask a question! </a></p>
+                    <p><a [routerLink]="['', { outlets: { dialog: 'qa' } }]"> Ask a question! </a></p>
                 </ng-template>
             </div>
             <div class='details'>
@@ -48,7 +48,7 @@
                     </p>
                 </ng-container>
                 <ng-template #noAnswers>
-                    <p><a routerLink="qa"> Provide at least one answer! </a></p>
+                    <p><a [routerLink]="['', { outlets: { dialog: 'qa' } }]"> Provide at least one answer! </a></p>
                 </ng-template>
             </div>
             <div class='details'>
@@ -62,7 +62,7 @@
                 </p>
                 <ng-template #notLoggedIn>
                     <p>
-                        <a routerLink="/signin"> Sign In </a>
+                        <a [routerLink]="['', { outlets: { dialog: 'signin' } }]"> Sign In </a>
                     </p>
                 </ng-template>
             </div>
@@ -74,8 +74,8 @@
                     Close
                 </button>
                 <button mat-flat-button type="submit" [disabled]="inProgress || !checkAll()" color="primary">
-                    <span *ngIf="puzzle.id">Save Puzzle</span>
-                    <span *ngIf="!puzzle.id">Create Puzzle</span>
+                    <span *ngIf="isSaveOperation()">Save Puzzle</span>
+                    <span *ngIf="isCreateOperation()">Create Puzzle</span>
                 </button>
             </div>
         </section>

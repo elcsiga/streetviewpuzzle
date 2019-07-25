@@ -80,6 +80,15 @@ export class PuzzleSaveDialogComponent implements OnInit, OnDestroy {
       && this.checkAuthor();
   }
 
+  isSaveOperation(): boolean {
+    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
+    return puzzle && !!puzzle.id;
+  }
+  isCreateOperation(): boolean {
+    const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
+    return puzzle && !puzzle.id;
+  }
+
   printPos() {
     const puzzle = this.editedPuzzleService.getPuzzleSnapshot();
     return puzzle && printPanoPos(puzzle.details.startView.position);

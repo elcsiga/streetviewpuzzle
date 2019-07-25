@@ -13,7 +13,8 @@
     </mat-menu>
 </div>
 <div *ngIf="(user$ | async) === null">
-    <button class="mat-elevation-z10" mat-flat-button color="primary" routerLink="/signin">
+    <button class="mat-elevation-z10" mat-flat-button color="primary" 
+        [routerLink]="[{ outlets: { dialog: 'signin' } }]">
         Sign in
     </button>
 </div>
