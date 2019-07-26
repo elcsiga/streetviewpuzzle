@@ -9,12 +9,14 @@ import { MapModule } from '../map/map.module';
 import { PuzzleCardComponent } from './puzzle-card/puzzle-card.component';
 import { PlayComponent } from './play/play.component';
 import { AuthModule } from '../auth/auth.module';
+import { PuzzlePlayDialogComponent } from './puzzle-play-dialog/puzzle-play-dialog.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     PuzzleCardComponent,
-    PlayComponent
+    PlayComponent,
+    PuzzlePlayDialogComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +29,8 @@ import { AuthModule } from '../auth/auth.module';
   ],
   exports: [
     HomeComponent,
-    PlayComponent
+    PlayComponent,
+    PuzzlePlayDialogComponent
   ]
 })
 export class GameModule { }

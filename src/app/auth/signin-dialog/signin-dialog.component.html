@@ -35,7 +35,7 @@
       </div>
     </section>
     <section>
-      Do not have an account? <a [routerLink]="[{ outlets: { dialog: 'register' } }]">Register</a>
+      Do not have an account? <a [routerLink]="'register' | dialogLink">Register</a>
     </section>
   </form>
 </app-dialog>

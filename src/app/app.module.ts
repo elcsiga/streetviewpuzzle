@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { GameModule } from './game/game.module';
 import { MaterialModule } from './material/material.module';
 import { EditModule } from './edit/edit.module';
+import { PlayModule } from './play/play.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { EditModule } from './edit/edit.module';
     AuthModule,
     MaterialModule,
     GameModule,
-    EditModule
+    EditModule,
+    PlayModule
   ],
   providers: [],
   bootstrap: [AppComponent]

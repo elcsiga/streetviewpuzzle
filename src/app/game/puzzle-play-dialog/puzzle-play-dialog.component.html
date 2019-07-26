@@ -1,0 +1,21 @@
+<app-dialog>
+    <div *ngIf="puzzle">
+        <section>
+            <h1>{{puzzle.details.title}}</h1>
+        </section>
+        <section>
+            <img [src]="puzzle.details.thumbnail" />
+        </section>
+        <section>
+            <div class="kit-button-row">
+                <span class="kit-separator"></span>
+                <button mat-button type="button" (click)='close()'>
+                    Close
+                </button>
+                <button color="primary" mat-flat-button type="button" [routerLink]="['play', puzzle.id]">
+                    Play
+                </button>
+            </div>
+        </section>
+    </div>
+</app-dialog>

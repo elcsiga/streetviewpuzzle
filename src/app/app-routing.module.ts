@@ -9,6 +9,7 @@ import { MapDialogComponent } from './edit/map-dialog/map-dialog.component';
 import { PuzzleEditorComponent } from './edit/puzzle-editor/puzzle-editor.component';
 import { PuzzleSaveDialogComponent } from './edit/puzzle-save-dialog/puzzle-save-dialog.component';
 import { PuzzleResolver } from './shared/puzzle-resolver/puzzle-resolver.service';
+import { PuzzlePlayDialogComponent } from './game/puzzle-play-dialog/puzzle-play-dialog.component';
 
 const routes: Routes = [
 
@@ -60,6 +61,14 @@ const routes: Routes = [
     component: PuzzleSaveDialogComponent,
     outlet: 'dialog',
     data: { animation: 'save' }
+  },
+
+  {
+    path: 'play/:puzzleId',
+    component: PuzzlePlayDialogComponent,
+    outlet: 'dialog',
+    resolve: { puzzle: PuzzleResolver },
+    data: { animation: 'play' }
   },
 
   { path: '**', component: HomeComponent }

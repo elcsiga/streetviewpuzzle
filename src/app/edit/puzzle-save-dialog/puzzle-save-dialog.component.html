@@ -13,7 +13,7 @@
             >
                 <span  valid>{{checkedPuzzle.puzzle.details.title}}</span>  
                 <span  invalid>
-                    <a [routerLink]="['', { outlets: { dialog: 'title' } }]">
+                    <a [routerLink]="'title' | dialogLink">
                         Set the title of the puzzle!
                     </a>
                 </span>  
@@ -33,7 +33,7 @@
             >
                 <span  valid>{{checkedPuzzle.puzzle.details.question}}</span>  
                 <span  invalid>
-                    <a [routerLink]="['', { outlets: { dialog: 'qa' } }]">
+                    <a [routerLink]="'qa' | dialogLink">
                         Ask a question!
                     </a>
                 </span>  
@@ -47,7 +47,7 @@
                     {{answer}}
                 </span>  
                 <span  invalid>
-                    <a [routerLink]="['', { outlets: { dialog: 'qa' } }]">
+                    <a [routerLink]="'qa' | dialogLink">
                         Provide at least one answer!
                     </a>
                 </span>  
@@ -64,7 +64,7 @@
                     </ng-container>
                 </span>  
                 <span  invalid>
-                    <a [routerLink]="['', { outlets: { dialog: 'signin' } }]"> Sign In </a>
+                    <a [routerLink]="'signin' | dialogLink"> Sign In </a>
                 </span>  
             </app-puzzle-check>
 

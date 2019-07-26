@@ -1,4 +1,4 @@
-<div class="puzzle-card" [routerLink]="'/play/' + puzzle.id">
+<div class="puzzle-card" [routerLink]="['play', puzzle.id] | dialogLink">
     <img [src]="puzzle.details.thumbnail" />
     <div class="bar"></div>
     <div class="title">
